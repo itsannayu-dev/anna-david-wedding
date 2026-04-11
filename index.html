@@ -77,7 +77,6 @@
       background: transparent;
       backdrop-filter: none;
       transition: transform 0.35s cubic-bezier(0.2, 0.9, 0.2, 1);
-      will-change: transform;
     }
 
     /* After hero end-state: hide on scroll down, show on scroll up (see setupNavScrollHide) */
@@ -380,7 +379,7 @@
 
     .hero--carousel .hero-title,
     .hero--carousel .hero-tagline {
-      text-shadow: 0 2px 28px rgba(0, 0, 0, 0.55), 0 1px 2px rgba(0, 0, 0, 0.35);
+      text-shadow: 0 1px 14px rgba(0, 0, 0, 0.5), 0 1px 2px rgba(0, 0, 0, 0.35);
     }
 
     /* ── Hero Scroll Morph (Figma end-state) ── */
@@ -591,17 +590,21 @@
 
     /* ── INVITATION SECTION ── */
     .invitation {
+      --invitation-col-gap: 90px;
       background-color: var(--cream);
-      display: flex;
-      gap: 90px;
-      align-items: center;
+      display: grid;
+      grid-template-columns: calc((100% - var(--invitation-col-gap)) / 2) calc((100% - var(--invitation-col-gap)) / 2);
+      gap: var(--invitation-col-gap);
+      align-items: stretch;
       padding: 100px;
+      box-sizing: border-box;
+      width: 100%;
     }
 
     .invitation-image {
-      width: 536px;
-      height: 595px;
-      flex-shrink: 0;
+      width: 100%;
+      min-width: 0;
+      min-height: 595px;
       overflow: hidden;
       position: relative;
     }
@@ -617,12 +620,15 @@
     }
 
     .invitation-content {
-      flex: 1;
+      min-width: 0;
+      width: 100%;
+      max-width: 100%;
       display: flex;
       flex-direction: column;
       gap: 24px;
       align-items: flex-start;
       justify-content: center;
+      box-sizing: border-box;
     }
 
     .invitation-text {
@@ -632,6 +638,9 @@
       line-height: 1.75;
       letter-spacing: 0.84px;
       color: var(--black);
+      margin: 0;
+      max-width: 100%;
+      overflow-wrap: break-word;
     }
 
     .invitation-text em {
@@ -727,6 +736,7 @@
       flex-direction: column;
       gap: 16px;
       align-items: center;
+      isolation: isolate;
       transition: transform 0.25s ease;
     }
 
@@ -736,8 +746,8 @@
       width: 110px;
       height: 110px;
       object-fit: contain;
-      mix-blend-mode: screen;
-      opacity: 0.92;
+      mix-blend-mode: normal;
+      opacity: 0.95;
     }
 
     .schedule-item-title {
@@ -934,15 +944,13 @@
       max-width: 100%;
       object-fit: contain;
       object-position: center center;
-      mix-blend-mode: multiply;
-      transform: scale(0.96) translateY(14px);
-      transform-origin: center center;
-      transition: transform 1.05s cubic-bezier(0.22, 1, 0.36, 1);
-      transition-delay: 0.06s;
+      mix-blend-mode: normal;
+      transform: none;
+      transition: none;
     }
 
     .travel-map.in-view .map-img {
-      transform: scale(1) translateY(0);
+      transform: none;
     }
 
     .travel .section-title {
@@ -1235,18 +1243,13 @@
       opacity: 1;
     }
 
-    /* ── Scroll Reveal ── */
-    [data-reveal] {
-      opacity: 0;
-      transform: translateY(18px);
-      transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.2, 0.9, 0.2, 1);
-      transition-delay: var(--reveal-delay, 0ms);
-      will-change: opacity, transform;
-    }
-
+    /* ── Scroll Reveal: disabled motion — transform/opacity reveals caused dark halos
+       behind text (font rasterization + compositing) while scrolling in WebKit/Blink. */
+    [data-reveal],
     [data-reveal].in-view {
       opacity: 1;
-      transform: translateY(0);
+      transform: none;
+      transition: none;
     }
 
     /* ── FOOTER (end of page; full-width fill above sticky hero) ── */
@@ -1272,7 +1275,7 @@
     @media (max-width: 1100px) {
       nav { padding: var(--nav-padding-top) 24px 0 24px; min-height: var(--nav-total-h); height: auto; }
       .invitation {
-        flex-direction: column;
+        grid-template-columns: 1fr;
         gap: 32px;
         padding: 80px 40px;
       }
@@ -1300,7 +1303,11 @@
       .gift .section-title {
         font-size: 56px;
       }
-      .invitation-image { width: 100%; max-width: 100%; flex-basis: auto; }
+      .invitation-image {
+        width: 100%;
+        max-width: 100%;
+        min-height: min(480px, 65vw);
+      }
       .travel-map {
         width: 100vw;
         max-width: none;
@@ -1452,7 +1459,7 @@
   <section class="schedule" id="schedule">
     <div class="schedule-header" data-reveal>
       <h2 class="section-title">Our Schedule</h2>
-      <p class="section-subtitle">Event times will be updated on this website closer to the event date. We'll send another email then.</p>
+      <p class="section-subtitle">Event times will be updated on this website closer to the event date. We'll send another email as a reminder closer to the date.</p>
     </div>
     <div class="schedule-items">
       <div class="schedule-item" data-reveal>
@@ -1557,7 +1564,7 @@
       <h2 class="section-title" style="color:var(--black); font-size:56px;">Frequently Questions &amp; Answers</h2>
       <div class="faq-list" data-reveal>
 
-        <details class="faq-item" open data-reveal>
+        <details class="faq-item" data-reveal>
           <summary class="faq-question">
             <span class="faq-q-text">Can I bring a plus one?</span>
             <span class="faq-chevron">
@@ -2059,39 +2066,11 @@
       );
     })();
 
-    // ── Scroll Reveal ──
+    // ── Scroll Reveal: mark in-view immediately (no IO — avoids class toggles / repaints while scrolling) ──
     (function setupScrollReveal() {
-      const revealEls = Array.from(document.querySelectorAll('[data-reveal]'));
-      if (!revealEls.length) return;
-
-      const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      if (reduceMotion) {
-        revealEls.forEach(el => el.classList.add('in-view'));
-        return;
-      }
-
-      if (!('IntersectionObserver' in window)) {
-        revealEls.forEach(el => el.classList.add('in-view'));
-        return;
-      }
-
-      revealEls.forEach((el, i) => {
-        const delay = Math.min(600, i * 60);
-        el.style.setProperty('--reveal-delay', `${delay}ms`);
+      document.querySelectorAll('[data-reveal]').forEach(el => {
+        el.classList.add('in-view');
       });
-
-      const io = new IntersectionObserver(
-        entries => {
-          entries.forEach(entry => {
-            if (!entry.isIntersecting) return;
-            entry.target.classList.add('in-view');
-            io.unobserve(entry.target);
-          });
-        },
-        { threshold: 0.15 }
-      );
-
-      revealEls.forEach(el => io.observe(el));
     })();
 
     // ── Nav: after hero end-state, hide on scroll down / show on scroll up ──
@@ -2192,35 +2171,31 @@
       });
     })();
 
-    // ── Nav: dark text when overlaying light sections (cream / white) ──
+    // ── Nav: dark text on light sections — geometry-based (elementsFromPoint flickered at section edges) ──
     (function setupNavTheme() {
       const nav = document.querySelector('nav');
       if (!nav) return;
 
       const darkSectionClasses = ['hero', 'schedule', 'gift', 'countdown-section'];
+      let lastLight = null;
 
       function isLightBackgroundBehindNav() {
-        const probeY = Math.min(44, Math.max(8, window.innerHeight * 0.06));
-        const probeX = window.innerWidth / 2;
-        let stack;
-        try {
-          stack = document.elementsFromPoint(probeX, probeY);
-        } catch (e) {
-          return false;
-        }
-        for (const el of stack) {
-          if (nav.contains(el)) continue;
-          const footer = el.closest && el.closest('footer');
-          if (footer) return false;
-          const section = el.closest && el.closest('section');
-          if (!section) continue;
+        const probeY = Math.min(48, Math.max(10, window.innerHeight * 0.07));
+        const sections = document.querySelectorAll('body > section');
+        for (let i = 0; i < sections.length; i++) {
+          const section = sections[i];
+          const r = section.getBoundingClientRect();
+          if (r.top > probeY || r.bottom < probeY) continue;
           return !darkSectionClasses.some(c => section.classList.contains(c));
         }
         return false;
       }
 
       function update() {
-        nav.classList.toggle('nav--light-bg', isLightBackgroundBehindNav());
+        const light = isLightBackgroundBehindNav();
+        if (light === lastLight) return;
+        lastLight = light;
+        nav.classList.toggle('nav--light-bg', light);
       }
 
       let themeTicking = false;
