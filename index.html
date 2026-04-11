@@ -1,0 +1,2242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Anna & David — September 5, 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Figtree:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet" />
+  <style>
+    @font-face { font-family: "Editor's Note"; src: url('EditorsNote-Hairline-iF664322be4e4fb.otf') format('opentype'); font-weight: 100; font-style: normal; }
+    @font-face { font-family: "Editor's Note"; src: url('EditorsNote-HairlineItalic-iF664322be52ef6.otf') format('opentype'); font-weight: 100; font-style: italic; }
+    @font-face { font-family: "Editor's Note"; src: url('EditorsNote-Thin-iF664322be7fa2e.otf') format('opentype'); font-weight: 200; font-style: normal; }
+    @font-face { font-family: "Editor's Note"; src: url('EditorsNote-ThinItalic-iF664322be84b79.otf') format('opentype'); font-weight: 200; font-style: italic; }
+    @font-face { font-family: "Editor's Note"; src: url('EditorsNote-Extralight-iF664322be43be3.otf') format('opentype'); font-weight: 275; font-style: normal; }
+    @font-face { font-family: "Editor's Note"; src: url('EditorsNote-ExtralightItalic-iF664322be48dd8.otf') format('opentype'); font-weight: 275; font-style: italic; }
+    @font-face { font-family: "Editor's Note"; src: url('EditorsNote-Light-iF664322be5b734.otf') format('opentype'); font-weight: 300; font-style: normal; }
+    @font-face { font-family: "Editor's Note"; src: url('EditorsNote-LightItalic-iF664322be6092b.otf') format('opentype'); font-weight: 300; font-style: italic; }
+    @font-face { font-family: "Editor's Note"; src: url('EditorsNote-Regular-iF664322be6e849.otf') format('opentype'); font-weight: 400; font-style: normal; }
+    @font-face { font-family: "Editor's Note"; src: url('EditorsNote-Italic-iF664322be57316.otf') format('opentype'); font-weight: 400; font-style: italic; }
+    @font-face { font-family: "Editor's Note"; src: url('EditorsNote-Medium-iF664322be6500a.otf') format('opentype'); font-weight: 500; font-style: normal; }
+    @font-face { font-family: "Editor's Note"; src: url('EditorsNote-MediumItalic-iF664322be6a12d.otf') format('opentype'); font-weight: 500; font-style: italic; }
+    @font-face { font-family: "Editor's Note"; src: url('EditorsNote-Semibold-iF664322be731c3.otf') format('opentype'); font-weight: 600; font-style: normal; }
+    @font-face { font-family: "Editor's Note"; src: url('EditorsNote-SemiboldItalic-iF664322be785e3.otf') format('opentype'); font-weight: 600; font-style: italic; }
+    @font-face { font-family: "Editor's Note"; src: url('EditorsNote-Bold-iF664322be38357.otf') format('opentype'); font-weight: 700; font-style: normal; }
+    @font-face { font-family: "Editor's Note"; src: url('EditorsNote-BoldItalic-iF664322be3e863.otf') format('opentype'); font-weight: 700; font-style: italic; }
+  </style>
+  <style>
+    /* ── Design Tokens ── */
+    :root {
+      --cream: #f8f6ec;
+      --forest: #434f40;
+      --hero-end-bg: #121710; /* end-state hero background */
+      --nav-padding-top: 20px;
+      --nav-bar-h: 54px;
+      --nav-total-h: calc(var(--nav-padding-top) + var(--nav-bar-h));
+      --hero-end-below-nav: 40px;
+      /* Space for nav + gap below it so collage clears the bar (≈114px; older layout used 54+40=94px) */
+      --hero-end-inset: calc(var(--nav-total-h) + var(--hero-end-below-nav));
+      --hero-end-pad-bottom: 100px;
+      --black: #1e1e1e;
+      --white: #ffffff;
+      --light-text: #f1f1f1;
+      --serif: "Editor's Note", Georgia, serif;
+      --sans: 'Figtree', sans-serif;
+      --hand: 'Caveat', cursive;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    /* Lock page scroll until hero morph reaches end-state */
+    html.hero-scroll-lock,
+    html.hero-scroll-lock body {
+      overflow: hidden;
+      height: 100%;
+    }
+
+    body {
+      font-family: var(--sans);
+      color: var(--black);
+      background: var(--white);
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-sizing: border-box;
+      min-height: var(--nav-total-h);
+      padding: var(--nav-padding-top) 40px 0 40px;
+      background: transparent;
+      backdrop-filter: none;
+      transition: transform 0.35s cubic-bezier(0.2, 0.9, 0.2, 1);
+      will-change: transform;
+    }
+
+    /* After hero end-state: hide on scroll down, show on scroll up (see setupNavScrollHide) */
+    nav.nav--hidden {
+      transform: translateY(-100%);
+      pointer-events: none;
+    }
+
+    /* Over cream / white sections: dark text + logo (see setupNavTheme) */
+    nav.nav--light-bg .nav-links a {
+      color: var(--black);
+    }
+
+    nav.nav--light-bg .nav-links a:hover {
+      opacity: 0.65;
+    }
+
+    nav.nav--light-bg .nav-rsvp {
+      color: var(--black);
+      border-color: var(--black);
+      background: transparent;
+    }
+
+    nav.nav--light-bg .nav-rsvp:hover {
+      background: var(--black);
+      color: var(--white);
+      border-color: var(--black);
+    }
+
+    nav.nav--light-bg .nav-logo img {
+      filter: brightness(0);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      height: 52px;
+      text-decoration: none;
+      color: inherit;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+
+    .nav-logo:focus-visible {
+      outline: 2px solid currentColor;
+      outline-offset: 4px;
+      border-radius: 4px;
+    }
+
+    .nav-logo img,
+    .nav-logo svg {
+      height: 52px;
+      width: auto;
+      display: block;
+      transition: filter 0.25s ease;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 50px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: var(--serif);
+      font-weight: 300;
+      font-size: 20px;
+      color: var(--white);
+      text-decoration: none;
+      letter-spacing: 0.6px;
+      transition: color 0.25s ease, opacity 0.2s;
+    }
+
+    .nav-links a:hover { opacity: 0.7; }
+
+    .nav-rsvp {
+      font-family: var(--serif);
+      font-weight: 300;
+      font-size: 20px;
+      color: var(--white);
+      letter-spacing: 1.4px;
+      border: 1px solid var(--white);
+      border-radius: 57px;
+      padding: 10px 30px;
+      text-decoration: none;
+      background: transparent;
+      transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+    }
+
+    .nav-rsvp:hover {
+      background: var(--white);
+      color: var(--black);
+    }
+
+    /* ── HERO ── */
+    .hero {
+      position: sticky;
+      top: 0;
+      z-index: 0;
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+      isolation: isolate;
+      transition: padding-top 0.45s ease;
+      /* Hero end-state base */
+      background-color: var(--hero-end-bg);
+      /* Side frames + middle column height (2× portrait + 40px gap) — keep in sync with JS gap */
+      --side-frame-w: clamp(176px, 17.2vw, 280px);
+      --side-frame-h: calc(var(--side-frame-w) * 5 / 4);
+      --middle-col-h: calc(var(--side-frame-h) * 2 + 40px);
+    }
+
+    /* Initial: nav over full-bleed hero; end state: padding + inner top = nav + 40px so collage sits below nav */
+    .hero.hero-end {
+      padding-top: var(--hero-end-inset);
+    }
+
+    .hero-inner {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      overflow: hidden;
+      transition: top 0.45s ease, bottom 0.45s ease;
+    }
+
+    .hero.hero-end .hero-inner {
+      top: var(--hero-end-inset);
+      bottom: var(--hero-end-pad-bottom);
+      background-color: var(--hero-end-bg);
+    }
+
+    /* Solid #121710 — remove vignette overlay in end layout (beats inline opacity from morph JS) */
+    .hero.hero-end .hero-overlay {
+      opacity: 0 !important;
+      pointer-events: none;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .hero-inner,
+      .hero { transition: none; }
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background-image: url('hero.jpg');
+      background-size: cover;
+      background-position: center 20%;
+      transform: scale(1.02);
+    }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 50%, rgba(0,0,0,0.7) 0%, rgba(0,0,0,1) 100%);
+      opacity: 0.75;
+      transition: opacity 0.2s linear;
+      z-index: 2;
+    }
+
+    .hero-title {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: var(--serif);
+      font-weight: 200;
+      font-style: italic;
+      font-size: clamp(60px, 8vw, 100px);
+      color: var(--white);
+      letter-spacing: 2px;
+      white-space: nowrap;
+      animation: fadeUp 1.2s ease both;
+      z-index: 5;
+      transition: opacity 0.2s linear;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translate(-50%, calc(-50% + 20px)); }
+      to   { opacity: 1; transform: translate(-50%, -50%); }
+    }
+
+    @keyframes fadeUpHeroHeading {
+      from { opacity: 0; transform: translate(-50%, calc(-50% + 20px)); }
+      to   { opacity: 1; transform: translate(-50%, -50%); }
+    }
+
+    /* Stacked hero title + tagline (carousel) */
+    .hero-heading {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      pointer-events: none;
+      animation: fadeUpHeroHeading 1.2s ease both;
+    }
+
+    .hero-heading .hero-title {
+      position: static;
+      left: auto;
+      top: auto;
+      transform: none;
+      animation: none;
+    }
+
+    .hero-tagline {
+      margin: -5px 0 0;
+      padding: 0;
+      font-family: var(--serif);
+      font-weight: 200; /* Editor's Note Thin */
+      font-style: normal;
+      font-size: 40px;
+      line-height: 1.15;
+      color: var(--white);
+      letter-spacing: 0.02em;
+      font-synthesis: none;
+    }
+
+    .hero-tagline em {
+      font-style: italic;
+      font-weight: 200; /* Thin Italic */
+    }
+
+    /* ── Hero carousel: horizontal strip, native scroll (no radial frame) ── */
+    .hero--carousel {
+      /* Not sticky: hero scrolls away with the page so the transition to #invitation feels like normal scrolling */
+      position: relative;
+      top: auto;
+      background-color: #000;
+    }
+
+    .hero--carousel .hero-carousel-inner {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+
+    .hero--carousel .hero-carousel-viewport {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      overflow-x: auto;
+      overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior-x: contain;
+      scrollbar-color: rgba(255, 255, 255, 0.35) rgba(0, 0, 0, 0.25);
+      scrollbar-width: thin;
+    }
+
+    .hero--carousel .hero-carousel-viewport::-webkit-scrollbar {
+      height: 8px;
+    }
+
+    .hero--carousel .hero-carousel-viewport::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    .hero--carousel .hero-carousel-viewport::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.35);
+      border-radius: 4px;
+    }
+
+    .hero--carousel .hero-carousel-track {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      height: 100%;
+      width: max-content;
+    }
+
+    .hero--carousel .hero-carousel-set {
+      display: flex;
+      flex-direction: row;
+      flex-shrink: 0;
+      height: 100%;
+      gap: 0;
+      margin: 0;
+      padding: 0;
+    }
+
+    .hero--carousel .hero-carousel-set img {
+      height: 100%;
+      width: auto;
+      max-height: 100vh;
+      display: block;
+      flex-shrink: 0;
+      margin: 0;
+      padding: 0;
+      border: 0;
+      object-fit: cover;
+      object-position: center center;
+    }
+
+    .hero--carousel .hero-title,
+    .hero--carousel .hero-tagline {
+      text-shadow: 0 2px 28px rgba(0, 0, 0, 0.55), 0 1px 2px rgba(0, 0, 0, 0.35);
+    }
+
+    /* ── Hero Scroll Morph (Figma end-state) ── */
+    .hero-end-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      background-color: var(--hero-end-bg);
+      opacity: 0.18;
+      transition: opacity 0.05s linear;
+      pointer-events: none;
+    }
+
+    /* Same asset as end-state center (End-State-Middle-Photo.jpg); match crop for initial full-bleed */
+    .hero-main-image {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center center;
+      z-index: 1;
+      transform: translate3d(0, 0, 0) scale(1.06);
+      will-change: transform, opacity;
+      opacity: 1;
+      pointer-events: none;
+      background-color: var(--hero-end-bg);
+      /* Crisp downsampling for large exports */
+      image-rendering: auto;
+    }
+
+    /* End-state center: width capped at 702; height matches stacked side column (top/bottom aligned) */
+    .hero-end .hero-main-image {
+      inset: auto;
+      left: 50%;
+      top: 50%;
+      right: auto;
+      bottom: auto;
+      box-sizing: border-box;
+      width: min(702px, calc(100vw - 48px));
+      height: var(--middle-col-h);
+      aspect-ratio: unset;
+      max-height: none;
+      transform: translate(-50%, -50%);
+      object-position: center center;
+    }
+
+    /* Corner photos: no border; same end size/position as Figma node 50-140 */
+    .hero-morph-card {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      z-index: 3;
+      border-radius: 0;
+      border: none;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.22);
+      will-change: transform, opacity;
+      transform: translate(-50%, -50%) translate3d(0, 0, 0) scale(0.8);
+      opacity: 0;
+      pointer-events: none;
+      box-sizing: border-box;
+      background-color: var(--hero-end-bg);
+      overflow: hidden;
+    }
+
+    .hero-morph-card .hero-morph-photo-img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center center;
+      background-color: var(--hero-end-bg);
+    }
+
+    /* Side frames: portrait ratio similar to Figma 50-140 (center ~2× side width) */
+    .hero-morph-photo--tl,
+    .hero-morph-photo--bl,
+    .hero-morph-photo--tr,
+    .hero-morph-photo--br {
+      width: var(--side-frame-w);
+      aspect-ratio: 4 / 5;
+      height: auto;
+    }
+
+    .hero-end .hero-title {
+      text-shadow: 0 2px 28px rgba(0, 0, 0, 0.55), 0 1px 2px rgba(0, 0, 0, 0.35);
+    }
+
+    /* ── Hero “More photos” collage ── */
+    .hero-more {
+      position: absolute;
+      left: 50%;
+      bottom: 52px;
+      transform: translateX(-50%);
+      z-index: 3;
+      border-radius: 999px;
+      padding: 14px 28px;
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      background: rgba(255, 255, 255, 0.10);
+      color: var(--white);
+      font-family: var(--serif);
+      font-weight: 300;
+      font-size: 20px;
+      letter-spacing: 1.4px;
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      user-select: none;
+    }
+
+    .hero-more:hover {
+      background: rgba(255, 255, 255, 0.16);
+      border-color: rgba(255, 255, 255, 0.55);
+    }
+
+    .hero-more:active { transform: translateX(-50%) scale(0.98); }
+
+    .hero-more-arrow {
+      width: 22px;
+      height: 22px;
+      transition: transform 0.6s cubic-bezier(0.2, 0.9, 0.2, 1);
+    }
+
+    .hero-collage-wrap {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 2;
+      padding: 24px 40px;
+      display: flex;
+      justify-content: center;
+      pointer-events: none;
+      opacity: 0;
+      transform: translateY(26px);
+      transition: opacity 0.6s ease, transform 0.7s cubic-bezier(0.2, 0.9, 0.2, 1);
+    }
+
+    .hero-collage-shell {
+      width: min(1120px, 92vw);
+      background: rgba(248, 246, 236, 0.10);
+      border: 1px solid rgba(255, 255, 255, 0.20);
+      border-radius: 26px;
+      padding: 18px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+      backdrop-filter: blur(10px);
+    }
+
+    .hero-collage {
+      display: grid;
+      grid-template-columns: 1.25fr 1fr 1fr;
+      gap: 14px;
+      height: 260px;
+    }
+
+    .hero-photo {
+      position: relative;
+      overflow: hidden;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .hero-photo::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(0,0,0,0) 40%, rgba(0,0,0,0.35) 100%);
+      opacity: 0.65;
+      transition: opacity 0.6s ease;
+      pointer-events: none;
+    }
+
+    .hero-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      transform: scale(1.06);
+      transition: transform 0.95s cubic-bezier(0.2, 0.9, 0.2, 1);
+    }
+
+    .hero-expanded .hero-overlay { opacity: 0.78; }
+    .hero-expanded .hero-more-arrow { transform: rotate(180deg); }
+    .hero-expanded .hero-title { transform: translate(-50%, calc(-50% - 86px)); }
+    .hero-expanded .hero-collage-wrap {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .hero-expanded .hero-photo img { transform: scale(1.02); }
+
+    .hero-photo:hover img { transform: scale(1.07); }
+
+    /* Stack above hero (z-index: 0) when layers overlap */
+    .invitation,
+    .schedule,
+    .story,
+    .gift,
+    .travel,
+    .faq,
+    .countdown-section {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── INVITATION SECTION ── */
+    .invitation {
+      background-color: var(--cream);
+      display: flex;
+      gap: 90px;
+      align-items: center;
+      padding: 100px;
+    }
+
+    .invitation-image {
+      width: 536px;
+      height: 595px;
+      flex-shrink: 0;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .invitation-image img {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center center;
+      left: 0;
+      top: 0;
+    }
+
+    .invitation-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      align-items: flex-start;
+      justify-content: center;
+    }
+
+    .invitation-text {
+      font-family: var(--serif);
+      font-weight: 200;
+      font-size: clamp(32px, 3vw, 42px);
+      line-height: 1.75;
+      letter-spacing: 0.84px;
+      color: var(--black);
+    }
+
+    .invitation-text em {
+      font-weight: 600;
+      font-style: italic;
+    }
+
+    /* Lincoln Estate → Google Maps: animated underline on hover */
+    .invitation-text a.invitation-venue-link {
+      color: inherit;
+      text-decoration: none;
+      background-image: linear-gradient(currentColor, currentColor);
+      background-position: 0 100%;
+      background-repeat: no-repeat;
+      background-size: 0% 1px;
+      transition: background-size 0.35s ease;
+    }
+
+    .invitation-text a.invitation-venue-link:hover {
+      background-size: 100% 1px;
+    }
+
+    .invitation-text a.invitation-venue-link em {
+      font-weight: 600;
+      font-style: italic;
+    }
+
+    .btn-outline-dark {
+      font-family: var(--serif);
+      font-weight: 300;
+      font-size: 20px;
+      letter-spacing: 1.4px;
+      color: var(--forest);
+      border: 1px solid var(--forest);
+      border-radius: 57px;
+      padding: 14px 30px;
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s;
+      display: inline-block;
+    }
+
+    .btn-outline-dark:hover {
+      background: var(--forest);
+      color: var(--white);
+    }
+
+    /* ── SCHEDULE ── */
+    .schedule {
+      background: var(--forest);
+      display: flex;
+      flex-direction: column;
+      gap: 80px;
+      align-items: center;
+      padding: 110px 100px;
+    }
+
+    .schedule-header {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      width: 100%;
+    }
+
+    .section-title {
+      font-family: var(--serif);
+      font-weight: 300;
+      font-size: clamp(40px, 4.5vw, 56px);
+      color: var(--white);
+      letter-spacing: 1.12px;
+    }
+
+    .section-subtitle {
+      font-family: var(--sans);
+      font-weight: 300;
+      font-style: normal;
+      font-size: 20px;
+      color: var(--light-text);
+      letter-spacing: 0.02em; /* fallback */
+      letter-spacing: 2%;
+    }
+
+    .schedule-items {
+      display: flex;
+      gap: 80px;
+      align-items: flex-start;
+      width: 100%;
+    }
+
+    .schedule-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      align-items: center;
+      transition: transform 0.25s ease;
+    }
+
+    .schedule-item:hover { transform: translateY(-6px); }
+
+    .schedule-icon {
+      width: 110px;
+      height: 110px;
+      object-fit: contain;
+      mix-blend-mode: screen;
+      opacity: 0.92;
+    }
+
+    .schedule-item-title {
+      font-family: var(--serif);
+      font-weight: 300;
+      font-style: italic;
+      font-size: 32px;
+      color: var(--light-text);
+      letter-spacing: 0.64px;
+    }
+
+    .schedule-item-desc {
+      font-family: var(--sans);
+      font-weight: 300;
+      font-size: 20px;
+      color: var(--light-text);
+      letter-spacing: 0.4px;
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    /* ── OUR STORY: 50/50 Figma — cream + text left, image right ── */
+    .story {
+      background: var(--cream);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: stretch;
+      gap: 0;
+      padding: 0;
+      box-sizing: border-box;
+      overflow-x: clip;
+      min-height: 100vh;
+    }
+
+    .story .section-title {
+      color: var(--black);
+      font-size: clamp(40px, 4.2vw, 56px);
+      font-weight: 300;
+      letter-spacing: 1px;
+      text-align: left;
+      width: 100%;
+      max-width: min(520px, 100%);
+      margin: 0;
+      align-self: flex-start;
+    }
+
+    .story-content {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      gap: clamp(1.1rem, 2vw, 1.5rem);
+      min-width: 0;
+      width: 100%;
+      padding: clamp(48px, 8vh, 120px) clamp(28px, 5vw, 72px);
+      align-self: stretch;
+      box-sizing: border-box;
+    }
+
+    .story-text {
+      font-family: var(--sans);
+      font-size: 20px;
+      font-weight: 400;
+      line-height: 1.65;
+      color: var(--black);
+      margin: 0;
+      width: 100%;
+      max-width: min(520px, 100%);
+      text-align: left;
+    }
+
+    .story-content .story-text + .story-text {
+      margin-top: 0.55em;
+    }
+
+    .story-text b { font-weight: 700; }
+    .story-text em { font-style: italic; }
+
+    .story-image {
+      width: 100%;
+      height: 100%;
+      min-height: 0;
+      align-self: stretch;
+      overflow: hidden;
+      background: var(--white);
+      position: relative;
+    }
+
+    .story-image img {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center center;
+      top: 0;
+      left: 0;
+      transition: transform 1.1s cubic-bezier(0.2, 0.9, 0.2, 1);
+    }
+
+    .story-image:hover img { transform: scale(1.05); }
+
+    /* ── GIFTS / REGISTRY: centered, dark olive, white type + gift icon (Figma 71-604) ── */
+    .gift {
+      background: #434f40;
+      color: var(--white);
+      padding: clamp(100px, 14vh, 180px) 100px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-sizing: border-box;
+      text-align: center;
+      min-height: min(72vh, 880px);
+    }
+
+    .gift-inner {
+      max-width: none;
+      width: 100%;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: clamp(1.35rem, 3vw, 2rem);
+    }
+
+    .gift .section-title {
+      color: var(--white);
+      font-family: var(--serif);
+      font-weight: 300;
+      font-size: 56px;
+      letter-spacing: 0.03em;
+      line-height: 1.05;
+      text-align: center;
+      margin: 0;
+      width: 100%;
+      max-width: none;
+      align-self: center;
+    }
+
+    .gift-lead {
+      font-family: var(--sans);
+      font-size: 20px;
+      font-weight: 300;
+      line-height: 1.65;
+      color: var(--white);
+      margin: 0;
+      text-align: center;
+    }
+
+    .gift-icon {
+      margin-top: 0.25rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .gift-icon img {
+      width: 90px;
+      height: 90px;
+      display: block;
+      object-fit: contain;
+    }
+
+    /* ── TRAVEL & STAY (Figma 71-576: 50/50 — copy left, map full-bleed right) ── */
+    .travel {
+      background: var(--white);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: stretch;
+      gap: 0;
+      /* Match FAQ section: 150px vertical, 100px horizontal */
+      padding: 150px 100px;
+      box-sizing: border-box;
+      overflow-x: clip;
+      min-height: 100vh;
+    }
+
+    .travel-map {
+      width: 100%;
+      height: 100%;
+      min-height: 0;
+      align-self: stretch;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--white);
+      padding: 0;
+    }
+
+    .travel-map .map-img {
+      width: 100%;
+      height: 100%;
+      max-width: 100%;
+      object-fit: contain;
+      object-position: center center;
+      mix-blend-mode: multiply;
+      transform: scale(0.96) translateY(14px);
+      transform-origin: center center;
+      transition: transform 1.05s cubic-bezier(0.22, 1, 0.36, 1);
+      transition-delay: 0.06s;
+    }
+
+    .travel-map.in-view .map-img {
+      transform: scale(1) translateY(0);
+    }
+
+    .travel .section-title {
+      color: var(--black);
+      font-size: clamp(40px, 4.2vw, 56px);
+      font-weight: 300;
+      letter-spacing: 1px;
+      text-align: left;
+      margin: 0 0 24px 0;
+      width: 100%;
+      max-width: min(520px, 100%);
+      align-self: flex-start;
+    }
+
+    .travel-content {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 0;
+      width: 100%;
+      padding: 0;
+      align-self: stretch;
+      box-sizing: border-box;
+    }
+
+    /* 40px between Travel copy and Stays block */
+    .travel-content > h2.section-title + div {
+      margin-bottom: 40px;
+    }
+
+    .travel-content > * {
+      width: 100%;
+      max-width: min(520px, 100%);
+    }
+
+    .travel-text {
+      font-family: var(--sans);
+      font-size: 20px;
+      line-height: 1.65;
+      color: var(--black);
+      margin: 0;
+    }
+
+    .travel-text b { font-weight: 700; }
+    .travel-text em { font-style: italic; font-weight: 700; }
+
+    .hotel-list {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .hotel-item {
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+      transition: transform 0.25s ease;
+      text-decoration: none;
+      color: inherit;
+      box-sizing: border-box;
+      cursor: pointer;
+    }
+
+    .hotel-item:hover {
+      transform: translateX(6px);
+    }
+
+    /* Animated underline on hotel name (hover entire stay row); scope with .hotel-name-underline */
+    .hotel-item--link .hotel-name-underline {
+      background-image: linear-gradient(currentColor, currentColor);
+      background-position: 0 100%;
+      background-repeat: no-repeat;
+      background-size: 0% 1px;
+      transition: background-size 0.35s ease;
+    }
+
+    .hotel-item--link:hover .hotel-name-underline {
+      background-size: 100% 1px;
+    }
+
+    .hotel-icon {
+      width: 30px;
+      height: 30px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--black);
+    }
+
+    .hotel-icon img {
+      width: 30px;
+      height: 30px;
+      display: block;
+    }
+
+    .hotel-name {
+      font-family: var(--sans);
+      font-weight: 400;
+      font-size: 20px;
+      color: var(--black);
+      line-height: 1.3;
+    }
+
+    .hotel-name em {
+      font-style: italic;
+    }
+
+    .hotel-distance {
+      font-family: var(--sans);
+      font-weight: 400;
+      font-size: 16px;
+      color: var(--black);
+    }
+
+    /* ── FAQ ── */
+    .faq {
+      background: var(--cream);
+      display: flex;
+      align-items: center;
+      padding: 150px 100px;
+    }
+
+    .faq-inner {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 44px;
+    }
+
+    .faq-list {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .faq-item {
+      border-bottom: 1px solid var(--forest);
+    }
+
+    .faq-question {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 32px 0;
+      cursor: pointer;
+      list-style: none;
+    }
+
+    .faq-question::-webkit-details-marker { display: none; }
+
+    .faq-q-text {
+      font-family: var(--serif);
+      font-weight: 300;
+      font-size: clamp(28px, 3vw, 40px);
+      color: var(--black);
+      letter-spacing: 0.8px;
+      line-height: 1.2;
+    }
+
+    .faq-chevron {
+      width: 32px;
+      height: 32px;
+      flex-shrink: 0;
+      transition: transform 0.3s ease;
+      color: var(--black);
+    }
+
+    .faq-chevron svg {
+      width: 32px;
+      height: 32px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    details[open] .faq-chevron { transform: rotate(180deg); }
+
+    .faq-answer {
+      font-family: var(--sans);
+      font-weight: 400;
+      font-size: 20px;
+      line-height: 1.55;
+      color: var(--black);
+      padding-bottom: 32px;
+      max-width: 900px;
+    }
+
+    /* ── COUNTDOWN ── */
+    .countdown-section {
+      background: var(--forest);
+      background-color: var(--forest);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: center;
+      padding: 110px 100px 0;
+      overflow: hidden;
+    }
+
+    .countdown-section > footer {
+      align-self: stretch;
+      width: 100%;
+      max-width: none;
+      box-sizing: border-box;
+      margin-top: auto;
+    }
+
+    .countdown-inner {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+      align-items: center;
+      width: 100%;
+    }
+
+    .countdown-title {
+      font-family: var(--serif);
+      font-weight: 300;
+      font-style: italic;
+      font-size: clamp(36px, 4vw, 56px);
+      color: var(--white);
+      text-align: center;
+      letter-spacing: 1.12px;
+      width: 100%;
+    }
+
+    .countdown-timer {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 0;
+      width: 100%;
+      color: var(--light-text);
+    }
+
+    .countdown-unit {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 230px;
+    }
+
+    .countdown-number {
+      font-family: var(--serif);
+      font-weight: 300;
+      font-size: clamp(60px, 7vw, 100px);
+      letter-spacing: 2px;
+      line-height: 1;
+    }
+
+    .countdown-label {
+      font-family: var(--sans);
+      font-weight: 300;
+      font-size: 20px;
+      letter-spacing: 0.4px;
+      margin-top: 8px;
+    }
+
+    .btn-outline-white {
+      font-family: var(--serif);
+      font-weight: 300;
+      font-size: 20px;
+      letter-spacing: 1.4px;
+      color: var(--white);
+      border: 1px solid var(--white);
+      border-radius: 57px;
+      padding: 14px 30px;
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s;
+      display: inline-block;
+    }
+
+    .btn-outline-white:hover {
+      background: var(--white);
+      color: var(--forest);
+    }
+
+    /* PNG (RGBA): avoid mix-blend-mode: screen — tuned for old opaque JPG; breaks transparency */
+    .countdown-floral {
+      width: 857px;
+      max-width: 100%;
+      height: auto;
+      margin-top: 30px;
+      display: block;
+      mix-blend-mode: normal;
+      opacity: 1;
+    }
+
+    /* ── Scroll Reveal ── */
+    [data-reveal] {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.2, 0.9, 0.2, 1);
+      transition-delay: var(--reveal-delay, 0ms);
+      will-change: opacity, transform;
+    }
+
+    [data-reveal].in-view {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── FOOTER (end of page; full-width fill above sticky hero) ── */
+    footer {
+      position: relative;
+      z-index: 1;
+      background: var(--forest);
+      background-color: var(--forest);
+      text-align: center;
+      padding: 28px 24px calc(32px + env(safe-area-inset-bottom, 0px));
+      border-top: 1px solid rgba(255,255,255,0.15);
+    }
+
+    footer p {
+      font-family: var(--serif);
+      font-weight: 300;
+      font-size: 16px;
+      color: rgba(241,241,241,0.5);
+      letter-spacing: 0.5px;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1100px) {
+      nav { padding: var(--nav-padding-top) 24px 0 24px; min-height: var(--nav-total-h); height: auto; }
+      .invitation {
+        flex-direction: column;
+        gap: 32px;
+        padding: 80px 40px;
+      }
+      .travel {
+        grid-template-columns: 1fr;
+        min-height: 100vh;
+        /* Match FAQ at this breakpoint */
+        padding: 80px 40px;
+      }
+      .story {
+        grid-template-columns: 1fr;
+        min-height: 100vh;
+        padding: 0;
+      }
+      .story-content {
+        padding: 80px 40px;
+        width: 100%;
+        max-width: 100%;
+        align-self: stretch;
+      }
+      .gift {
+        min-height: auto;
+        padding: 80px 40px;
+      }
+      .gift .section-title {
+        font-size: 56px;
+      }
+      .invitation-image { width: 100%; max-width: 100%; flex-basis: auto; }
+      .travel-map {
+        width: 100vw;
+        max-width: none;
+        min-height: min(75vw, 480px);
+        height: auto;
+        margin-left: calc(50% - 50vw);
+        margin-right: calc(50% - 50vw);
+      }
+      .travel-content {
+        padding: 0;
+        width: 100%;
+        max-width: 100%;
+      }
+      .travel-content > * {
+        max-width: 100%;
+      }
+      .story-image {
+        width: 100vw;
+        max-width: none;
+        min-height: min(80vw, 480px);
+        aspect-ratio: 506 / 561;
+        height: auto;
+        margin-left: calc(50% - 50vw);
+        margin-right: calc(50% - 50vw);
+      }
+      .schedule { padding: 80px 40px; }
+      .schedule-items { flex-direction: column; }
+      .faq { padding: 80px 40px; }
+      .countdown-section { padding: 80px 40px 0; }
+      .countdown-unit { width: 160px; }
+      .nav-links { gap: 24px; }
+    }
+
+    @media (max-width: 640px) {
+      .hero-morph-photo--tl,
+      .hero-morph-photo--bl,
+      .hero-morph-photo--tr,
+      .hero-morph-photo--br {
+        width: clamp(128px, 40vw, 220px);
+        max-height: 42vh;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .nav-logo { height: 40px; }
+      .nav-logo img,
+      .nav-logo svg { height: 40px; }
+      .hero-heading { width: 90%; max-width: 100%; }
+      .hero-heading .hero-title,
+      .hero-title { font-size: 48px; white-space: normal; text-align: center; width: 100%; }
+      .hero-tagline { font-size: clamp(22px, 5.2vw, 40px); }
+      .hero-more { bottom: 34px; font-size: 18px; padding: 12px 22px; }
+      .hero-collage-wrap { padding: 18px 18px; }
+      .hero-collage { grid-template-columns: 1fr; height: auto; }
+      .hero-photo { height: 160px; }
+      .invitation-image { height: 300px; }
+      .story-image {
+        min-height: 260px;
+        aspect-ratio: 506 / 561;
+      }
+      .travel-map {
+        min-height: 280px;
+        aspect-ratio: 1 / 1;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+        scroll-behavior: auto !important;
+      }
+      [data-reveal] { opacity: 1; transform: none; }
+      .travel-map .map-img {
+        transform: none;
+        transition: none;
+      }
+      .hero-collage-wrap, .hero-more-arrow, .hero-title, .hero-heading { transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#hero" class="nav-logo" aria-label="Back to top">
+      <img src="Logo.svg" alt="" width="55" height="52" decoding="async" />
+    </a>
+    <ul class="nav-links">
+      <li><a href="#invitation">Venue</a></li>
+      <li><a href="#schedule">Schedule</a></li>
+      <li><a href="#story">Our Story</a></li>
+      <li><a href="#registry">Gifts</a></li>
+      <li><a href="#travel">Travel &amp; Stay</a></li>
+      <li><a href="#faq">Q&amp;A</a></li>
+    </ul>
+    <a href="https://withjoy.com/david-anna-sep5/rsvp" class="nav-rsvp" target="_blank" rel="noopener noreferrer">RSVP</a>
+  </nav>
+
+  <!-- HERO — Long-hero PNG strip; autoscroll + horizontal scroll (duplicate set loops seamlessly) -->
+  <section class="hero hero--carousel" id="hero">
+    <div class="hero-inner hero-carousel-inner">
+      <div class="hero-carousel-viewport" id="heroCarouselViewport" aria-label="Wedding photos — autoscrolling gallery; scroll horizontally to explore" tabindex="0">
+        <div class="hero-carousel-track" id="heroCarouselTrack">
+          <div class="hero-carousel-set">
+            <img src="Long-hero-1.png" alt="" width="800" height="1200" loading="eager" fetchpriority="high" decoding="async" />
+            <img src="Long-hero-2.png" alt="" width="800" height="1200" loading="eager" decoding="async" />
+            <img src="Long-hero-3.png" alt="" width="800" height="1200" loading="eager" decoding="async" />
+            <img src="Long-hero-4.png" alt="" width="800" height="1200" loading="eager" decoding="async" />
+          </div>
+          <div class="hero-carousel-set" aria-hidden="true">
+            <img src="Long-hero-1.png" alt="" width="800" height="1200" loading="eager" decoding="async" />
+            <img src="Long-hero-2.png" alt="" width="800" height="1200" loading="eager" decoding="async" />
+            <img src="Long-hero-3.png" alt="" width="800" height="1200" loading="eager" decoding="async" />
+            <img src="Long-hero-4.png" alt="" width="800" height="1200" loading="eager" decoding="async" />
+          </div>
+        </div>
+      </div>
+      <div class="hero-heading">
+        <h1 class="hero-title">ANNA &amp; DAVID</h1>
+        <p class="hero-tagline">are <em>finally</em> getting married</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- INVITATION -->
+  <section class="invitation" id="invitation">
+    <div class="invitation-image" data-reveal>
+      <img src="lincoln-estate.jpg" alt="Lincoln Estate" loading="lazy" />
+    </div>
+    <div class="invitation-content" data-reveal>
+      <p class="invitation-text">
+        You are cordially invited to our wedding at
+        <a
+          class="invitation-venue-link"
+          href="https://www.google.com/maps/search/?api=1&amp;query=Lincoln+Estate+Ontario+Canada"
+          target="_blank"
+          rel="noopener noreferrer"
+        ><em>Lincoln Estate</em></a> on
+        <br /><em>Saturday September 5, 2026</em>
+      </p>
+      <a href="https://withjoy.com/david-anna-sep5/rsvp" class="btn-outline-dark" target="_blank" rel="noopener noreferrer">RSVP</a>
+    </div>
+  </section>
+
+  <!-- SCHEDULE -->
+  <section class="schedule" id="schedule">
+    <div class="schedule-header" data-reveal>
+      <h2 class="section-title">Our Schedule</h2>
+      <p class="section-subtitle">Event times will be updated on this website closer to the event date. We'll send another email then.</p>
+    </div>
+    <div class="schedule-items">
+      <div class="schedule-item" data-reveal>
+        <img class="schedule-icon" src="Ceremony.png" alt="Ceremony" />
+        <p class="schedule-item-title">Ceremony</p>
+        <p class="schedule-item-desc">Exchange vows in the lush vineyards of the private estate</p>
+      </div>
+      <div class="schedule-item" data-reveal>
+        <img class="schedule-icon" src="Cocktail.png" alt="Cocktail" />
+        <p class="schedule-item-title">Cocktail</p>
+        <p class="schedule-item-desc">Sip and savour small bites as we celebrate the start of a new chapter</p>
+      </div>
+      <div class="schedule-item" data-reveal>
+        <img class="schedule-icon" src="Reception.png" alt="Reception" />
+        <p class="schedule-item-title">Reception</p>
+        <p class="schedule-item-desc">Revel in a sumptuous feast, followed by an evening of dancing and speeches</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- OUR STORY -->
+  <section class="story" id="story">
+    <div class="story-content" data-reveal>
+      <h2 class="section-title">Our Story</h2>
+      <p class="story-text">
+        Anna and David met in Grade 10 with a first date at a very questionable Chinese restaurant. From high school to the University of Waterloo, their paths have always stayed aligned. They love traveling the world together while searching for the best hikes and food spots.
+      </p>
+      <p class="story-text">
+        Fifteen years later, they've grown up side by side, share a home, and adopted an adorable little bichonpoo (Mimi). Now, they're ready to tie the knot and celebrate the next chapter with everyone who has been apart of their journey ❤️
+      </p>
+    </div>
+    <div class="story-image" data-reveal>
+      <img src="our-story.jpg" alt="Anna and David" loading="lazy" />
+    </div>
+  </section>
+
+  <!-- GIFTS / REGISTRY — dark panel, centered (Figma 71-604) -->
+  <section class="gift" id="registry">
+    <div class="gift-inner" data-reveal>
+      <h2 class="section-title">Gifts</h2>
+      <p class="gift-lead">Your presence is the greatest blessing to us.<br />
+        Should you wish to give a gift, a monetary contribution would be sincerely appreciated.</p>
+      <div class="gift-icon">
+        <img src="Gift.png?v=1774236155" width="90" height="90" alt="" loading="lazy" decoding="async" />
+      </div>
+    </div>
+  </section>
+
+  <!-- TRAVEL -->
+  <section class="travel" id="travel">
+    <div class="travel-content" data-reveal>
+      <h2 class="section-title">Travel</h2>
+      <div>
+        <p class="travel-text">
+          The drive back to Toronto will take around <em>1h&nbsp;15min.</em> If you're enjoying the wine, please arrange a ride or stay the night.
+        </p>
+      </div>
+      <h3 class="section-title">Stays</h3>
+      <div class="hotel-list">
+        <a
+          class="hotel-item hotel-item--link"
+          href="https://www.google.com/maps/search/?api=1&amp;query=Holiday+Inn+%26+Suites+St.+Catharines+IHG+Hotel+Ontario+Canada"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Holiday Inn &amp; Suites St. Catharines — open in Google Maps"
+          data-reveal
+        >
+          <div class="hotel-icon">
+            <img src="Hotel.svg" alt="" width="30" height="30" loading="lazy" decoding="async" />
+          </div>
+          <div>
+            <p class="hotel-name"><span class="hotel-name-underline">Holiday Inn &amp; Suites St. Catharines, an IHG Hotel</span></p>
+            <p class="hotel-distance">15min drive from Venue</p>
+          </div>
+        </a>
+        <a
+          class="hotel-item hotel-item--link"
+          href="https://www.google.com/maps/search/?api=1&amp;query=Four+Points+by+Sheraton+Hamilton+Ontario+Canada"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Four Points by Sheraton Hamilton — open in Google Maps"
+          data-reveal
+        >
+          <div class="hotel-icon">
+            <img src="Hotel.svg" alt="" width="30" height="30" loading="lazy" decoding="async" />
+          </div>
+          <div>
+            <p class="hotel-name"><span class="hotel-name-underline">Four Points by Sheraton Hamilton</span> <em>(We're staying here)</em></p>
+            <p class="hotel-distance">30min drive from Venue</p>
+          </div>
+        </a>
+      </div>
+    </div>
+    <div class="travel-map" data-reveal>
+      <img class="map-img" src="map.jpg" alt="Illustrated map showing Lincoln Estates, Hamilton, Mississauga and Toronto" loading="lazy" />
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq" id="faq">
+    <div class="faq-inner" data-reveal>
+      <h2 class="section-title" style="color:var(--black); font-size:56px;">Frequently Questions &amp; Answers</h2>
+      <div class="faq-list" data-reveal>
+
+        <details class="faq-item" open data-reveal>
+          <summary class="faq-question">
+            <span class="faq-q-text">Can I bring a plus one?</span>
+            <span class="faq-chevron">
+              <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </span>
+          </summary>
+          <p class="faq-answer">If your invitation includes a plus one, you'll see their name when RSVPing. Didn't receive one but hoping to bring someone? Reach out to us, we'll do our best.</p>
+        </details>
+
+        <details class="faq-item" data-reveal>
+          <summary class="faq-question">
+            <span class="faq-q-text">When is the RSVP deadline?</span>
+            <span class="faq-chevron">
+              <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </span>
+          </summary>
+          <p class="faq-answer">Please RSVP by August 15th, so we can have an accurate headcount.</p>
+        </details>
+
+        <details class="faq-item" data-reveal>
+          <summary class="faq-question">
+            <span class="faq-q-text">Is parking available on site?</span>
+            <span class="faq-chevron">
+              <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </span>
+          </summary>
+          <p class="faq-answer">Yes, complimentary parking is available at the estate. If you plan to enjoy the wine, and we hope you do, please consider carpooling or arranging a ride. Note that it's a 1 hr 15 min drive back to Toronto.</p>
+        </details>
+
+        <details class="faq-item" data-reveal>
+          <summary class="faq-question">
+            <span class="faq-q-text">What's the dress code?</span>
+            <span class="faq-chevron">
+              <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </span>
+          </summary>
+          <p class="faq-answer">Cocktail attire, whimsical garden theme.</p>
+        </details>
+
+        <details class="faq-item" data-reveal>
+          <summary class="faq-question">
+            <span class="faq-q-text">What will the weather be like?</span>
+            <span class="faq-chevron">
+              <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </span>
+          </summary>
+          <p class="faq-answer">High of 22°C, low of 15°C</p>
+        </details>
+
+        <details class="faq-item" data-reveal>
+          <summary class="faq-question">
+            <span class="faq-q-text">Is the wedding indoors or outdoors?</span>
+            <span class="faq-chevron">
+              <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </span>
+          </summary>
+          <p class="faq-answer">Our wedding ceremony is outdoors, but our reception will be in a tent.</p>
+        </details>
+
+        <details class="faq-item" data-reveal>
+          <summary class="faq-question">
+            <span class="faq-q-text">Is it okay to take pictures during the wedding?</span>
+            <span class="faq-chevron">
+              <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </span>
+          </summary>
+          <p class="faq-answer">We kindly ask that phones and cameras be tucked away during the ceremony. After the ceremony, you're free to take as many photos.</p>
+        </details>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- COUNTDOWN -->
+  <section class="countdown-section" id="countdown">
+    <div class="countdown-inner" data-reveal>
+      <h2 class="countdown-title">Let the countdown begin</h2>
+      <div class="countdown-timer">
+        <div class="countdown-unit">
+          <span class="countdown-number" id="cd-days">169</span>
+          <span class="countdown-label">DAYS</span>
+        </div>
+        <div class="countdown-unit">
+          <span class="countdown-number" id="cd-hours">00</span>
+          <span class="countdown-label">HOURS</span>
+        </div>
+        <div class="countdown-unit">
+          <span class="countdown-number" id="cd-minutes">00</span>
+          <span class="countdown-label">MINUTES</span>
+        </div>
+        <div class="countdown-unit">
+          <span class="countdown-number" id="cd-seconds">00</span>
+          <span class="countdown-label">SECONDS</span>
+        </div>
+      </div>
+      <a href="https://withjoy.com/david-anna-sep5/rsvp" class="btn-outline-white" target="_blank" rel="noopener noreferrer">RSVP</a>
+    </div>
+    <img
+      class="countdown-floral"
+      src="Flora.png?v=1774236180"
+      alt="Floral decoration"
+      loading="lazy"
+    />
+    <footer>
+      <p>Anna &amp; David · September 5, 2026 · Lincoln Estates, Ontario</p>
+    </footer>
+  </section>
+
+  <script>
+    // ── Countdown ──
+    const weddingDate = new Date('2026-09-05T14:00:00');
+
+    function updateCountdown() {
+      const now = new Date();
+      const diff = weddingDate - now;
+      if (diff <= 0) {
+        document.getElementById('cd-days').textContent = '00';
+        document.getElementById('cd-hours').textContent = '00';
+        document.getElementById('cd-minutes').textContent = '00';
+        document.getElementById('cd-seconds').textContent = '00';
+        return;
+      }
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+      document.getElementById('cd-days').textContent = String(days).padStart(2, '0');
+      document.getElementById('cd-hours').textContent = String(hours).padStart(2, '0');
+      document.getElementById('cd-minutes').textContent = String(minutes).padStart(2, '0');
+      document.getElementById('cd-seconds').textContent = String(seconds).padStart(2, '0');
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+
+    // ── Hero scroll morph (Figma end-state) ──
+    (function setupHeroScrollMorph() {
+      const hero = document.querySelector('section.hero');
+      if (!hero) return;
+
+      const heroInner = hero.querySelector('.hero-inner');
+      if (!heroInner) return;
+
+      const main = hero.querySelector('.hero-main-image');
+      const photoTL = hero.querySelector('.hero-morph-photo--tl');
+      const photoBL = hero.querySelector('.hero-morph-photo--bl');
+      const photoTR = hero.querySelector('.hero-morph-photo--tr');
+      const photoBR = hero.querySelector('.hero-morph-photo--br');
+      const endBg = hero.querySelector('.hero-end-bg');
+
+      if (!main || !photoTL || !photoBL || !photoTR || !photoBR || !endBg) return;
+
+      const overlay = hero.querySelector('.hero-overlay');
+
+      const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      const clamp01 = n => Math.max(0, Math.min(1, n));
+      const smoothstep = t => t * t * (3 - 2 * t);
+      const lerp = (a, b, t) => a + (b - a) * t;
+
+      const getMorphDistance = () => Math.max(420, hero.offsetHeight * 0.55);
+
+      /** 0..1: wheel/touch advance morph; page scroll stays locked until 1 */
+      let morphProgress = reduceMotion ? 1 : 0;
+      let heroMorphUnlocked = reduceMotion;
+
+      const applyHeroScrollLock = () => {
+        if (heroMorphUnlocked) {
+          document.documentElement.classList.remove('hero-scroll-lock');
+        } else {
+          document.documentElement.classList.add('hero-scroll-lock');
+          window.scrollTo(0, 0);
+        }
+      };
+
+      if (!reduceMotion) {
+        try { history.scrollRestoration = 'manual'; } catch (e) {}
+        window.scrollTo(0, 0);
+        applyHeroScrollLock();
+      }
+
+      let rafId = 0;
+      const update = () => {
+        rafId = 0;
+
+        /* Re-lock scroll while morphing backward from end-state */
+        if (morphProgress < 1) {
+          heroMorphUnlocked = false;
+        }
+
+        const t = clamp01(morphProgress);
+        const s = smoothstep(t);
+
+        // End background and overlay (#121710 via --hero-end-bg; no flora texture)
+        endBg.style.opacity = String(lerp(0.18, 1, s));
+        if (overlay) overlay.style.opacity = String(lerp(0.75, 0, s));
+
+        /* Before .hero-end: scale full-bleed center; after: width + height from CSS (middle matches side stack) */
+        const mainScale = lerp(1.06, 0.62, s);
+        const atEndLayout = s > 0.82;
+        if (atEndLayout) {
+          main.style.removeProperty('transform');
+          main.style.removeProperty('width');
+          main.style.removeProperty('height');
+        } else {
+          main.style.transform = `translate3d(0, 0, 0) scale(${mainScale.toFixed(4)})`;
+        }
+
+        // When we're close to the end state, apply the rounded-corners look.
+        hero.classList.toggle('hero-end', atEndLayout);
+
+        // Side photos: left column enters from the left; right column from the right (Figma 50-140).
+        const photoT = smoothstep(clamp01((s - 0.18) / 0.82));
+        const photoEase = smoothstep(smoothstep(photoT));
+        const photoScale = lerp(0.94, 1.0, photoEase);
+        const photoOpacity = lerp(0, 1, photoEase);
+        const rect = heroInner.getBoundingClientRect();
+        const w = rect.width;
+        const h = rect.height;
+
+        // End positions (px from hero center): 40px gap from middle frame; 40px between TL/BL and TR/BR.
+        // Middle width matches CSS: min(702px, 100vw - 48px).
+        const gap = 40;
+        const middleW = Math.min(702, Math.max(0, w - 48));
+        const middleHalfPx = middleW / 2;
+        const sideRect = photoTL.getBoundingClientRect();
+        const sideW = sideRect.width > 0 ? sideRect.width : 220;
+        const sideH = sideRect.height > 0 ? sideRect.height : Math.round(sideW * 1.25);
+
+        const tlEndX = -(middleHalfPx + gap + sideW / 2);
+        const blEndX = tlEndX;
+        const trEndX = middleHalfPx + gap + sideW / 2;
+        const brEndX = trEndX;
+        const tlEndY = -(sideH + gap) / 2;
+        const blEndY = (sideH + gap) / 2;
+        const trEndY = tlEndY;
+        const brEndY = blEndY;
+
+        const slide = 0.44 * w;
+        // Left photos: start further left, move right into place (same Y as end for smooth horizontal motion).
+        const tlStartX = tlEndX - slide;
+        const tlStartY = tlEndY;
+        const blStartX = blEndX - slide;
+        const blStartY = blEndY;
+        // Right photos: start further right, move left into place.
+        const trStartX = trEndX + slide;
+        const trStartY = trEndY;
+        const brStartX = brEndX + slide;
+        const brStartY = brEndY;
+
+        const applyPhoto = (el, startX, startY, endX, endY) => {
+          const x = lerp(startX, endX, photoEase);
+          const y = lerp(startY, endY, photoEase);
+          el.style.opacity = String(photoOpacity);
+          el.style.transform = `translate(-50%, -50%) translate3d(${x.toFixed(2)}px, ${y.toFixed(2)}px, 0) scale(${photoScale.toFixed(4)}) rotate(0deg)`;
+        };
+
+        applyPhoto(photoTL, tlStartX, tlStartY, tlEndX, tlEndY);
+        applyPhoto(photoBL, blStartX, blStartY, blEndX, blEndY);
+        applyPhoto(photoTR, trStartX, trStartY, trEndX, trEndY);
+        applyPhoto(photoBR, brStartX, brStartY, brEndX, brEndY);
+
+        if (!heroMorphUnlocked && morphProgress >= 1) {
+          morphProgress = 1;
+          heroMorphUnlocked = true;
+        }
+        applyHeroScrollLock();
+        document.documentElement.classList.toggle('hero-morph-complete', heroMorphUnlocked);
+      };
+
+      const scheduleUpdate = () => {
+        if (rafId) return;
+        rafId = window.requestAnimationFrame(update);
+      };
+
+      /** Page is at top so end-state hero can receive reverse-morph input */
+      const isAtPageTop = () => window.scrollY <= 2;
+
+      const onWheel = e => {
+        if (reduceMotion) return;
+        if (heroMorphUnlocked) {
+          /* Scroll up at top: reverse morph back to starting hero */
+          if (!isAtPageTop() || e.deltaY >= 0) return;
+          e.preventDefault();
+          const dist = getMorphDistance();
+          morphProgress = clamp01(morphProgress + e.deltaY / dist);
+          scheduleUpdate();
+          return;
+        }
+        e.preventDefault();
+        const dist = getMorphDistance();
+        morphProgress = clamp01(morphProgress + e.deltaY / dist);
+        scheduleUpdate();
+      };
+
+      let touchLastY = null;
+      const onTouchStart = e => {
+        if (reduceMotion) return;
+        if (heroMorphUnlocked) {
+          if (!isAtPageTop()) return;
+          touchLastY = e.touches[0].clientY;
+          return;
+        }
+        touchLastY = e.touches[0].clientY;
+      };
+      const onTouchMove = e => {
+        if (reduceMotion) return;
+        if (touchLastY == null) return;
+        if (heroMorphUnlocked) {
+          if (!isAtPageTop()) return;
+          const y = e.touches[0].clientY;
+          const dy = touchLastY - y;
+          touchLastY = y;
+          /* Finger moves down (dy < 0): reverse morph; finger up (dy > 0): let page scroll down */
+          if (dy >= 0) return;
+          e.preventDefault();
+          const dist = getMorphDistance();
+          morphProgress = clamp01(morphProgress + dy / dist);
+          scheduleUpdate();
+          return;
+        }
+        e.preventDefault();
+        const y = e.touches[0].clientY;
+        const dy = touchLastY - y;
+        touchLastY = y;
+        const dist = getMorphDistance();
+        morphProgress = clamp01(morphProgress + dy / dist);
+        scheduleUpdate();
+      };
+      const onTouchEnd = () => { touchLastY = null; };
+
+      const onScrollGuard = () => {
+        if (reduceMotion || heroMorphUnlocked) return;
+        if (window.scrollY > 0) window.scrollTo(0, 0);
+      };
+
+      const onKeyDown = e => {
+        if (reduceMotion) return;
+        const keys = ['PageDown', 'PageUp', ' ', 'ArrowDown', 'ArrowUp', 'Home', 'End'];
+        if (!keys.includes(e.key)) return;
+        const tag = e.target && e.target.tagName;
+        if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+        if (heroMorphUnlocked) {
+          const reverseKeys = ['PageUp', 'ArrowUp', 'Home'];
+          if (!reverseKeys.includes(e.key) || !isAtPageTop()) return;
+          e.preventDefault();
+          morphProgress = clamp01(morphProgress - 0.12);
+          scheduleUpdate();
+          return;
+        }
+        e.preventDefault();
+        const dist = getMorphDistance();
+        let step = 0;
+        if (e.key === 'PageDown' || e.key === 'ArrowDown' || e.key === ' ' || e.key === 'End') step = 0.12;
+        if (e.key === 'PageUp' || e.key === 'ArrowUp' || e.key === 'Home') step = -0.12;
+        morphProgress = clamp01(morphProgress + step);
+        scheduleUpdate();
+      };
+
+      if (!reduceMotion) {
+        window.addEventListener('wheel', onWheel, { passive: false });
+        document.addEventListener('touchstart', onTouchStart, { passive: true });
+        document.addEventListener('touchmove', onTouchMove, { passive: false });
+        document.addEventListener('touchend', onTouchEnd, { passive: true });
+        window.addEventListener('scroll', onScrollGuard, { passive: true });
+        window.addEventListener('keydown', onKeyDown);
+        document.querySelectorAll('a[href^="#"]').forEach(a => {
+          a.addEventListener('click', ev => {
+            if (heroMorphUnlocked) return;
+            const href = a.getAttribute('href') || '';
+            if (href === '#' || href === '#hero' || href === '#invitation') return;
+            ev.preventDefault();
+          });
+        });
+      }
+
+      window.addEventListener('resize', scheduleUpdate);
+
+      update();
+    })();
+
+    // ── Hero carousel: PNG strip, autoscroll + native horizontal scroll, seamless loop ──
+    (function setupHeroCarousel() {
+      const hero = document.querySelector('.hero--carousel');
+      if (!hero) return;
+
+      const viewport = document.getElementById('heroCarouselViewport');
+      const track = document.getElementById('heroCarouselTrack');
+      if (!viewport || !track) return;
+
+      document.documentElement.classList.remove('hero-scroll-lock');
+      document.documentElement.classList.add('hero-morph-complete');
+
+      const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const sets = track.querySelectorAll('.hero-carousel-set');
+      const autoSpeed = reduceMotion ? 0 : 1.05;
+      let segmentW = 0;
+      let rafId = 0;
+      let pauseAuto = false;
+      let resumeTimer = 0;
+
+      function measure() {
+        if (sets[0]) segmentW = sets[0].getBoundingClientRect().width;
+      }
+
+      function wrapScroll() {
+        if (segmentW <= 0) return;
+        let sl = viewport.scrollLeft;
+        while (sl >= segmentW) sl -= segmentW;
+        while (sl < 0) sl += segmentW;
+        if (sl !== viewport.scrollLeft) viewport.scrollLeft = sl;
+      }
+
+      function bumpAutoPause() {
+        pauseAuto = true;
+        if (resumeTimer) clearTimeout(resumeTimer);
+        resumeTimer = window.setTimeout(() => {
+          pauseAuto = false;
+          resumeTimer = 0;
+        }, 2800);
+      }
+
+      function tick() {
+        if (!pauseAuto && autoSpeed > 0 && segmentW > 0) {
+          viewport.scrollLeft += autoSpeed;
+          if (viewport.scrollLeft >= segmentW) viewport.scrollLeft -= segmentW;
+        }
+        rafId = requestAnimationFrame(tick);
+      }
+
+      function onImagesLoaded() {
+        measure();
+        wrapScroll();
+      }
+
+      sets.forEach(set => {
+        set.querySelectorAll('img').forEach(img => {
+          if (img.complete) onImagesLoaded();
+          else img.addEventListener('load', onImagesLoaded);
+        });
+      });
+
+      window.addEventListener('resize', () => {
+        measure();
+        wrapScroll();
+      });
+
+      measure();
+      wrapScroll();
+
+      if (!reduceMotion) {
+        rafId = requestAnimationFrame(tick);
+      }
+
+      document.addEventListener('visibilitychange', () => {
+        if (reduceMotion) return;
+        if (document.hidden) {
+          if (rafId) cancelAnimationFrame(rafId);
+          rafId = 0;
+        } else if (!rafId) {
+          rafId = requestAnimationFrame(tick);
+        }
+      });
+
+      viewport.addEventListener('pointerdown', bumpAutoPause);
+      viewport.addEventListener('touchstart', bumpAutoPause, { passive: true });
+      viewport.addEventListener('scroll', () => wrapScroll(), { passive: true });
+
+      viewport.addEventListener('keydown', e => {
+        bumpAutoPause();
+        const step = Math.min(480, viewport.clientWidth * 0.75);
+        if (e.key === 'ArrowLeft') {
+          e.preventDefault();
+          viewport.scrollBy({ left: -step, behavior: 'smooth' });
+        } else if (e.key === 'ArrowRight') {
+          e.preventDefault();
+          viewport.scrollBy({ left: step, behavior: 'smooth' });
+        }
+      });
+
+      // Shift + vertical wheel scrolls the strip horizontally; plain wheel still scrolls the page
+      viewport.addEventListener(
+        'wheel',
+        e => {
+          if (e.shiftKey && Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+            const max = viewport.scrollWidth - viewport.clientWidth;
+            if (max <= 0) return;
+            bumpAutoPause();
+            e.preventDefault();
+            viewport.scrollLeft += e.deltaY;
+            wrapScroll();
+            return;
+          }
+          if (Math.abs(e.deltaX) > Math.abs(e.deltaY) * 1.1) {
+            bumpAutoPause();
+          }
+        },
+        { passive: false }
+      );
+    })();
+
+    // ── Scroll Reveal ──
+    (function setupScrollReveal() {
+      const revealEls = Array.from(document.querySelectorAll('[data-reveal]'));
+      if (!revealEls.length) return;
+
+      const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (reduceMotion) {
+        revealEls.forEach(el => el.classList.add('in-view'));
+        return;
+      }
+
+      if (!('IntersectionObserver' in window)) {
+        revealEls.forEach(el => el.classList.add('in-view'));
+        return;
+      }
+
+      revealEls.forEach((el, i) => {
+        const delay = Math.min(600, i * 60);
+        el.style.setProperty('--reveal-delay', `${delay}ms`);
+      });
+
+      const io = new IntersectionObserver(
+        entries => {
+          entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add('in-view');
+            io.unobserve(entry.target);
+          });
+        },
+        { threshold: 0.15 }
+      );
+
+      revealEls.forEach(el => io.observe(el));
+    })();
+
+    // ── Nav: after hero end-state, hide on scroll down / show on scroll up ──
+    // In-page nav clicks (smooth scroll to #section) keep the bar visible until scroll ends;
+    // only “manual” scroll gestures hide on scroll-down.
+    (function setupNavScrollHide() {
+      const nav = document.querySelector('nav');
+      if (!nav) return;
+
+      let lastY = window.scrollY;
+      let ticking = false;
+      let fromNavAnchorScroll = false;
+      let anchorScrollFallbackTimer = 0;
+
+      function endNavAnchorScroll() {
+        fromNavAnchorScroll = false;
+        lastY = window.scrollY;
+        if (anchorScrollFallbackTimer) {
+          clearTimeout(anchorScrollFallbackTimer);
+          anchorScrollFallbackTimer = 0;
+        }
+      }
+
+      nav.addEventListener('click', e => {
+        const link = e.target.closest('a');
+        if (!link || !nav.contains(link)) return;
+        const href = link.getAttribute('href');
+        if (!href || href === '#' || href.charAt(0) !== '#') return;
+        let id;
+        try {
+          id = decodeURIComponent(href.slice(1));
+        } catch (err) {
+          return;
+        }
+        if (!id || !document.getElementById(id)) return;
+        fromNavAnchorScroll = true;
+        nav.classList.remove('nav--hidden');
+        if (anchorScrollFallbackTimer) clearTimeout(anchorScrollFallbackTimer);
+        anchorScrollFallbackTimer = window.setTimeout(endNavAnchorScroll, 1400);
+      });
+
+      document.addEventListener(
+        'scrollend',
+        () => {
+          if (fromNavAnchorScroll) endNavAnchorScroll();
+        },
+        true
+      );
+
+      function apply() {
+        ticking = false;
+        const y = window.scrollY;
+        const afterHeroMorph = document.documentElement.classList.contains('hero-morph-complete');
+
+        if (!afterHeroMorph) {
+          nav.classList.remove('nav--hidden');
+          lastY = y;
+          return;
+        }
+
+        if (fromNavAnchorScroll) {
+          nav.classList.remove('nav--hidden');
+          lastY = y;
+          return;
+        }
+
+        const dy = y - lastY;
+        if (Math.abs(dy) < 4) {
+          lastY = y;
+          return;
+        }
+
+        if (dy > 0) {
+          nav.classList.add('nav--hidden');
+        } else {
+          nav.classList.remove('nav--hidden');
+        }
+        lastY = y;
+      }
+
+      function onScroll() {
+        if (!ticking) {
+          ticking = true;
+          requestAnimationFrame(apply);
+        }
+      }
+
+      window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', () => {
+        endNavAnchorScroll();
+        nav.classList.remove('nav--hidden');
+        apply();
+      });
+
+      requestAnimationFrame(() => {
+        lastY = window.scrollY;
+        apply();
+      });
+    })();
+
+    // ── Nav: dark text when overlaying light sections (cream / white) ──
+    (function setupNavTheme() {
+      const nav = document.querySelector('nav');
+      if (!nav) return;
+
+      const darkSectionClasses = ['hero', 'schedule', 'gift', 'countdown-section'];
+
+      function isLightBackgroundBehindNav() {
+        const probeY = Math.min(44, Math.max(8, window.innerHeight * 0.06));
+        const probeX = window.innerWidth / 2;
+        let stack;
+        try {
+          stack = document.elementsFromPoint(probeX, probeY);
+        } catch (e) {
+          return false;
+        }
+        for (const el of stack) {
+          if (nav.contains(el)) continue;
+          const footer = el.closest && el.closest('footer');
+          if (footer) return false;
+          const section = el.closest && el.closest('section');
+          if (!section) continue;
+          return !darkSectionClasses.some(c => section.classList.contains(c));
+        }
+        return false;
+      }
+
+      function update() {
+        nav.classList.toggle('nav--light-bg', isLightBackgroundBehindNav());
+      }
+
+      let themeTicking = false;
+      function onScrollOrResize() {
+        if (themeTicking) return;
+        themeTicking = true;
+        requestAnimationFrame(() => {
+          themeTicking = false;
+          update();
+        });
+      }
+
+      window.addEventListener('scroll', onScrollOrResize, { passive: true });
+      window.addEventListener('resize', onScrollOrResize);
+      requestAnimationFrame(update);
+    })();
+  </script>
+</body>
+</html>
