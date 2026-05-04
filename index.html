@@ -174,6 +174,202 @@
       color: var(--black);
     }
 
+    .nav-menu-toggle {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      padding: 0;
+      margin: 0;
+      border: none;
+      background: transparent;
+      color: var(--white);
+      cursor: pointer;
+      border-radius: 8px;
+      flex-shrink: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .nav-menu-toggle:focus-visible {
+      outline: 2px solid currentColor;
+      outline-offset: 3px;
+    }
+
+    .nav-menu-bars {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 6px;
+      width: 24px;
+      height: 18px;
+    }
+
+    .nav-menu-bars span {
+      display: block;
+      height: 2px;
+      width: 100%;
+      background: currentColor;
+      border-radius: 1px;
+      transition: transform 0.25s ease, opacity 0.2s ease;
+      transform-origin: center;
+    }
+
+    nav.nav--menu-open .nav-menu-bars span:nth-child(1) {
+      transform: translateY(8px) rotate(45deg);
+    }
+
+    nav.nav--menu-open .nav-menu-bars span:nth-child(2) {
+      opacity: 0;
+      transform: scaleX(0);
+    }
+
+    nav.nav--menu-open .nav-menu-bars span:nth-child(3) {
+      transform: translateY(-8px) rotate(-45deg);
+    }
+
+    nav.nav--light-bg .nav-menu-toggle {
+      color: var(--black);
+    }
+
+    .nav-mobile-panel {
+      display: none;
+      flex-direction: column;
+      position: fixed;
+      inset: 0;
+      z-index: 101;
+      width: 100%;
+      min-height: 100vh;
+      min-height: 100dvh;
+      max-height: 100vh;
+      max-height: 100dvh;
+      box-sizing: border-box;
+      padding: 0;
+      margin: 0;
+      background: var(--cream);
+      overflow-x: hidden;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.28s ease, visibility 0.28s ease;
+      pointer-events: none;
+    }
+
+    .nav-mobile-panel.is-open {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    .nav-mobile-header {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      flex-shrink: 0;
+      padding: calc(var(--nav-padding-top) + env(safe-area-inset-top, 0px)) clamp(16px, 4vw, 28px) 8px;
+      box-sizing: border-box;
+    }
+
+    .nav-mobile-close {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      padding: 0;
+      margin: 0;
+      border: none;
+      border-radius: 8px;
+      background: transparent;
+      color: var(--black);
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .nav-mobile-close:hover {
+      opacity: 0.7;
+    }
+
+    .nav-mobile-close:focus-visible {
+      outline: 2px solid var(--forest);
+      outline-offset: 3px;
+    }
+
+    .nav-mobile-close svg {
+      width: 26px;
+      height: 26px;
+      display: block;
+    }
+
+    .nav-mobile-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: stretch;
+      padding: 12px clamp(24px, 6vw, 40px) calc(28px + env(safe-area-inset-bottom, 0px));
+      box-sizing: border-box;
+      min-height: 0;
+    }
+
+    .nav-mobile-links {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      width: 100%;
+      max-width: 28rem;
+      align-self: center;
+    }
+
+    .nav-mobile-links a {
+      display: block;
+      font-family: var(--serif);
+      font-weight: 300;
+      font-size: clamp(22px, 5vw, 28px);
+      color: var(--black);
+      text-decoration: none;
+      letter-spacing: 0.5px;
+      padding: 18px 0;
+      border-bottom: 1px solid rgba(67, 79, 64, 0.2);
+      text-align: center;
+    }
+
+    .nav-mobile-links a:hover {
+      opacity: 0.75;
+    }
+
+    .nav-mobile-links li:last-child a {
+      border-bottom: none;
+    }
+
+    .nav-rsvp--drawer {
+      margin-top: 2rem;
+      align-self: center;
+      width: 100%;
+      max-width: 28rem;
+      text-align: center;
+      font-family: var(--serif);
+      font-weight: 300;
+      font-size: 20px;
+      color: var(--black);
+      letter-spacing: 1.4px;
+      border: 1px solid var(--black);
+      border-radius: 57px;
+      padding: 12px 24px;
+      text-decoration: none;
+      background: transparent;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    .nav-rsvp--drawer:hover {
+      background: var(--black);
+      color: var(--white);
+    }
+
     /* ── HERO ── */
     .hero {
       position: sticky;
@@ -1509,6 +1705,15 @@
 
     @media (max-width: 768px) {
       .nav-links { display: none; }
+      .nav-rsvp--desktop { display: none !important; }
+      .nav-menu-toggle {
+        display: inline-flex;
+        position: relative;
+        z-index: 92;
+      }
+      .nav-mobile-panel {
+        display: flex;
+      }
       .nav-logo { height: 40px; }
       .nav-logo img,
       .nav-logo svg { height: 40px; }
@@ -1569,6 +1774,9 @@
       .hero--carousel .hero-carousel-ff {
         display: none;
       }
+      .nav-mobile-panel {
+        transition: none;
+      }
     }
   </style>
 </head>
@@ -1587,10 +1795,57 @@
       <li><a href="#travel">Travel &amp; Stay</a></li>
       <li><a href="#faq">Q&amp;A</a></li>
     </ul>
-    <a href="https://withjoy.com/david-anna-sep5/rsvp" class="nav-rsvp" target="_blank" rel="noopener noreferrer">RSVP</a>
+    <a href="https://withjoy.com/david-anna-sep5/rsvp" class="nav-rsvp nav-rsvp--desktop" target="_blank" rel="noopener noreferrer">RSVP</a>
+    <div
+      class="nav-mobile-panel"
+      id="navMobilePanel"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Site menu"
+      aria-hidden="true"
+    >
+      <div class="nav-mobile-header">
+        <button type="button" class="nav-mobile-close" id="navMobileClose" aria-label="Close menu">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              d="M6 6l12 12M18 6L6 18"
+            />
+          </svg>
+        </button>
+      </div>
+      <div class="nav-mobile-body">
+        <ul class="nav-mobile-links">
+          <li><a href="#invitation">Venue</a></li>
+          <li><a href="#schedule">Schedule</a></li>
+          <li><a href="#story">Our Story</a></li>
+          <li><a href="#registry">Gifts</a></li>
+          <li><a href="#travel">Travel &amp; Stay</a></li>
+          <li><a href="#faq">Q&amp;A</a></li>
+        </ul>
+        <a href="https://withjoy.com/david-anna-sep5/rsvp" class="nav-rsvp--drawer" target="_blank" rel="noopener noreferrer">RSVP</a>
+      </div>
+    </div>
+    <button
+      type="button"
+      class="nav-menu-toggle"
+      id="navMenuToggle"
+      aria-expanded="false"
+      aria-controls="navMobilePanel"
+      aria-label="Open menu"
+    >
+      <span class="nav-menu-bars" aria-hidden="true">
+        <span></span>
+        <span></span>
+        <span></span>
+      </span>
+    </button>
   </nav>
 
-  <!-- HERO — Long-hero PNG strip; autoscroll + horizontal scroll (duplicate set loops seamlessly) -->
+  <!-- HERO — Long-hero PNG strip; autoscroll; duplicate set loops seamlessly -->
   <section class="hero hero--carousel" id="hero">
     <div class="hero-inner hero-carousel-inner">
       <div class="hero-carousel-viewport" id="heroCarouselViewport" aria-label="Wedding photos: autoscrolling gallery">
@@ -2325,12 +2580,13 @@
       });
     })();
 
-    // ── Nav: after hero end-state, hide on scroll down / show on scroll up ──
-    // In-page nav clicks (smooth scroll to #section) keep the bar visible until scroll ends;
-    // only “manual” scroll gestures hide on scroll-down.
+    // ── Nav: after hero end-state, hide on scroll down / show on scroll up (desktop only) ──
+    // ≤768px: bar stays visible. In-page # clicks keep the bar visible until scroll ends.
     (function setupNavScrollHide() {
       const nav = document.querySelector('nav');
       if (!nav) return;
+
+      const navAlwaysVisibleMq = window.matchMedia('(max-width: 768px)');
 
       let lastY = window.scrollY;
       let ticking = false;
@@ -2383,6 +2639,12 @@
           return;
         }
 
+        if (navAlwaysVisibleMq.matches) {
+          nav.classList.remove('nav--hidden');
+          lastY = y;
+          return;
+        }
+
         if (fromNavAnchorScroll) {
           nav.classList.remove('nav--hidden');
           lastY = y;
@@ -2417,10 +2679,88 @@
         apply();
       });
 
+      function onNavAlwaysVisibleMqChange() {
+        if (navAlwaysVisibleMq.matches) nav.classList.remove('nav--hidden');
+        lastY = window.scrollY;
+      }
+      if (navAlwaysVisibleMq.addEventListener) {
+        navAlwaysVisibleMq.addEventListener('change', onNavAlwaysVisibleMqChange);
+      } else if (navAlwaysVisibleMq.addListener) {
+        navAlwaysVisibleMq.addListener(onNavAlwaysVisibleMqChange);
+      }
+
       requestAnimationFrame(() => {
         lastY = window.scrollY;
         apply();
       });
+    })();
+
+    // ── Nav: mobile hamburger + full-screen menu (≤768px); RSVP inside menu; close button + Escape ──
+    (function setupNavMobileMenu() {
+      const nav = document.querySelector('nav');
+      const toggle = document.getElementById('navMenuToggle');
+      const closeBtn = document.getElementById('navMobileClose');
+      const panel = document.getElementById('navMobilePanel');
+      if (!nav || !toggle || !closeBtn || !panel) return;
+
+      const mq = window.matchMedia('(max-width: 768px)');
+
+      function isMobile() {
+        return mq.matches;
+      }
+
+      function openMenu() {
+        if (!isMobile()) return;
+        nav.classList.add('nav--menu-open');
+        panel.classList.add('is-open');
+        panel.setAttribute('aria-hidden', 'false');
+        toggle.setAttribute('aria-expanded', 'true');
+        toggle.setAttribute('aria-label', 'Close menu');
+        document.body.style.overflow = 'hidden';
+        window.setTimeout(() => closeBtn.focus({ preventScroll: true }), 60);
+      }
+
+      function closeMenu() {
+        nav.classList.remove('nav--menu-open');
+        panel.classList.remove('is-open');
+        panel.setAttribute('aria-hidden', 'true');
+        toggle.setAttribute('aria-expanded', 'false');
+        toggle.setAttribute('aria-label', 'Open menu');
+        document.body.style.overflow = '';
+        window.setTimeout(() => toggle.focus({ preventScroll: true }), 0);
+      }
+
+      function onToggleClick(e) {
+        e.preventDefault();
+        if (!isMobile()) return;
+        if (panel.classList.contains('is-open')) closeMenu();
+        else openMenu();
+      }
+
+      toggle.addEventListener('click', onToggleClick);
+      closeBtn.addEventListener('click', () => {
+        if (panel.classList.contains('is-open')) closeMenu();
+      });
+
+      document.addEventListener('keydown', e => {
+        if (e.key === 'Escape' && panel.classList.contains('is-open')) {
+          closeMenu();
+        }
+      });
+
+      panel.addEventListener('click', e => {
+        const link = e.target.closest('a');
+        if (!link || !panel.contains(link)) return;
+        closeMenu();
+      });
+
+      function onViewportChange() {
+        if (!isMobile() && panel.classList.contains('is-open')) closeMenu();
+      }
+
+      if (mq.addEventListener) mq.addEventListener('change', onViewportChange);
+      else if (mq.addListener) mq.addListener(onViewportChange);
+      window.addEventListener('resize', onViewportChange);
     })();
 
     // ── Nav: dark text on light sections — geometry-based (elementsFromPoint flickered at section edges) ──
