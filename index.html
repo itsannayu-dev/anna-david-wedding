@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Anna & David — September 5, 2026</title>
+  <title>Anna & David · September 5, 2026</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Figtree:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet" />
@@ -61,6 +61,8 @@
       font-family: var(--sans);
       color: var(--black);
       background: var(--white);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
 
     /* ── NAV ── */
@@ -77,6 +79,7 @@
       background: transparent;
       backdrop-filter: none;
       transition: transform 0.35s cubic-bezier(0.2, 0.9, 0.2, 1);
+      will-change: transform;
     }
 
     /* After hero end-state: hide on scroll down, show on scroll up (see setupNavScrollHide) */
@@ -307,7 +310,7 @@
       font-weight: 200; /* Thin Italic */
     }
 
-    /* ── Hero carousel: horizontal strip, native scroll (no radial frame) ── */
+    /* ── Hero carousel: horizontal strip, autoscroll only (no manual pan/scroll) ── */
     .hero--carousel {
       /* Not sticky: hero scrolls away with the page so the transition to #invitation feels like normal scrolling */
       position: relative;
@@ -325,25 +328,10 @@
       position: absolute;
       inset: 0;
       z-index: 1;
-      overflow-x: auto;
+      overflow-x: hidden;
       overflow-y: hidden;
-      -webkit-overflow-scrolling: touch;
-      overscroll-behavior-x: contain;
-      scrollbar-color: rgba(255, 255, 255, 0.35) rgba(0, 0, 0, 0.25);
-      scrollbar-width: thin;
-    }
-
-    .hero--carousel .hero-carousel-viewport::-webkit-scrollbar {
-      height: 8px;
-    }
-
-    .hero--carousel .hero-carousel-viewport::-webkit-scrollbar-track {
-      background: rgba(0, 0, 0, 0.2);
-    }
-
-    .hero--carousel .hero-carousel-viewport::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.35);
-      border-radius: 4px;
+      touch-action: pan-y;
+      overscroll-behavior-x: none;
     }
 
     .hero--carousel .hero-carousel-track {
@@ -377,9 +365,45 @@
       object-position: center center;
     }
 
+    .hero--carousel .hero-carousel-ff {
+      position: absolute;
+      right: clamp(16px, 4vw, 28px);
+      bottom: clamp(20px, 5vh, 36px);
+      z-index: 4;
+      width: 48px;
+      height: 48px;
+      padding: 0;
+      margin: 0;
+      border: 1px solid rgba(255, 255, 255, 0.42);
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.38);
+      color: rgba(255, 255, 255, 0.95);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .hero--carousel .hero-carousel-ff:hover {
+      background: rgba(0, 0, 0, 0.52);
+      border-color: rgba(255, 255, 255, 0.65);
+    }
+
+    .hero--carousel .hero-carousel-ff:active {
+      transform: scale(0.95);
+    }
+
+    .hero--carousel .hero-carousel-ff:focus-visible {
+      outline: 2px solid rgba(255, 255, 255, 0.85);
+      outline-offset: 3px;
+    }
+
     .hero--carousel .hero-title,
     .hero--carousel .hero-tagline {
-      text-shadow: 0 1px 14px rgba(0, 0, 0, 0.5), 0 1px 2px rgba(0, 0, 0, 0.35);
+      /* Tight shadow only — large blur smeared during scroll and read as “halos” on content below */
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
     }
 
     /* ── Hero Scroll Morph (Figma end-state) ── */
@@ -578,11 +602,17 @@
 
     /* Stack above hero (z-index: 0) when layers overlap */
     .invitation,
-    .schedule,
     .story,
-    .gift,
     .travel,
-    .faq,
+    .faq {
+      position: relative;
+      z-index: 1;
+      isolation: isolate;
+    }
+
+    /* Forest sections: no isolation — isolate + light text on #434f40 was repainting badly on scroll */
+    .schedule,
+    .gift,
     .countdown-section {
       position: relative;
       z-index: 1;
@@ -690,18 +720,22 @@
     /* ── SCHEDULE ── */
     .schedule {
       background: var(--forest);
+      background-color: var(--forest);
       display: flex;
       flex-direction: column;
       gap: 80px;
       align-items: center;
       padding: 110px 100px;
+      -webkit-font-smoothing: subpixel-antialiased;
+      -moz-osx-font-smoothing: auto;
+      text-rendering: optimizeLegibility;
     }
 
     .schedule-header {
       text-align: center;
       display: flex;
       flex-direction: column;
-      gap: 7px;
+      gap: 8px;
       width: 100%;
     }
 
@@ -717,10 +751,10 @@
       font-family: var(--sans);
       font-weight: 300;
       font-style: normal;
-      font-size: 20px;
+      font-size: clamp(15px, 1.85vw, 17px);
       color: var(--light-text);
-      letter-spacing: 0.02em; /* fallback */
-      letter-spacing: 2%;
+      letter-spacing: 0.02em;
+      line-height: 1.55;
     }
 
     .schedule-items {
@@ -736,18 +770,65 @@
       flex-direction: column;
       gap: 16px;
       align-items: center;
-      isolation: isolate;
-      transition: transform 0.25s ease;
     }
 
-    .schedule-item:hover { transform: translateY(-6px); }
+    .schedule-item-head {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      text-align: center;
+    }
 
-    .schedule-icon {
+    .schedule-item-head .schedule-item-title {
+      margin: 0;
+      line-height: 1.15;
+    }
+
+    .schedule-item-time {
+      font-family: var(--sans);
+      font-weight: 300;
+      font-style: normal;
+      font-size: 20px;
+      color: var(--light-text);
+      letter-spacing: 0.4px;
+      line-height: 1.5;
+      text-align: center;
+      margin: 0;
+    }
+
+    .schedule-icon-wrap {
       width: 110px;
       height: 110px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      background: transparent;
+    }
+
+    .schedule-icon {
+      display: block;
+      background: transparent;
+      width: 110px;
+      height: 110px;
+      max-width: 100%;
+      max-height: 100%;
       object-fit: contain;
       mix-blend-mode: normal;
-      opacity: 0.95;
+      opacity: 1;
+      transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .schedule-icon-wrap:hover .schedule-icon {
+        transform: translateY(-3px) scale(1.03);
+      }
+    }
+
+    .schedule-icon--arrival {
+      width: 92px;
+      height: 92px;
     }
 
     .schedule-item-title {
@@ -757,6 +838,7 @@
       font-size: 32px;
       color: var(--light-text);
       letter-spacing: 0.64px;
+      text-align: center;
     }
 
     .schedule-item-desc {
@@ -767,6 +849,7 @@
       letter-spacing: 0.4px;
       text-align: center;
       line-height: 1.5;
+      margin: 0;
     }
 
     /* ── OUR STORY: 50/50 Figma — cream + text left, image right ── */
@@ -851,7 +934,8 @@
 
     /* ── GIFTS / REGISTRY: centered, dark olive, white type + gift icon (Figma 71-604) ── */
     .gift {
-      background: #434f40;
+      background: var(--forest);
+      background-color: var(--forest);
       color: var(--white);
       padding: clamp(100px, 14vh, 180px) 100px;
       display: flex;
@@ -861,6 +945,9 @@
       box-sizing: border-box;
       text-align: center;
       min-height: min(72vh, 880px);
+      -webkit-font-smoothing: subpixel-antialiased;
+      -moz-osx-font-smoothing: auto;
+      text-rendering: optimizeLegibility;
     }
 
     .gift-inner {
@@ -904,11 +991,28 @@
       align-items: center;
     }
 
-    .gift-icon img {
+    .gift-icon-wrap {
+      width: 90px;
+      height: 90px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+    }
+
+    .gift-icon-wrap img {
       width: 90px;
       height: 90px;
       display: block;
       object-fit: contain;
+      background: transparent;
+      transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .gift-icon-wrap:hover img {
+        transform: translateY(-3px) scale(1.03);
+      }
     }
 
     /* ── TRAVEL & STAY (Figma 71-576: 50/50 — copy left, map full-bleed right) ── */
@@ -995,8 +1099,35 @@
       margin: 0;
     }
 
-    .travel-text b { font-weight: 700; }
-    .travel-text em { font-style: italic; font-weight: 700; }
+    .travel-text + .travel-text {
+      margin-top: 1.25em;
+    }
+
+    .travel-content > h3.section-title + .travel-text {
+      margin-bottom: 1.25em;
+    }
+
+    .travel-text b,
+    .travel-text strong {
+      font-weight: 700;
+      font-style: normal;
+    }
+
+    .travel-text em {
+      font-style: italic;
+      font-weight: 700;
+    }
+
+    .travel-inline-map {
+      color: inherit;
+      font-weight: 700;
+      font-style: normal;
+      text-decoration: none;
+    }
+
+    .travel-inline-map:hover {
+      text-decoration: underline;
+    }
 
     .hotel-list {
       display: flex;
@@ -1054,6 +1185,7 @@
       font-size: 20px;
       color: var(--black);
       line-height: 1.3;
+      margin: 0;
     }
 
     .hotel-name em {
@@ -1065,6 +1197,7 @@
       font-weight: 400;
       font-size: 16px;
       color: var(--black);
+      margin: 4px 0 0;
     }
 
     /* ── FAQ ── */
@@ -1142,6 +1275,16 @@
       max-width: 900px;
     }
 
+    .faq-outro {
+      font-family: var(--sans);
+      font-weight: 400;
+      font-size: 20px;
+      line-height: 1.55;
+      color: var(--black);
+      margin: 0;
+      max-width: 900px;
+    }
+
     /* ── COUNTDOWN ── */
     .countdown-section {
       background: var(--forest);
@@ -1151,7 +1294,11 @@
       gap: 10px;
       align-items: center;
       padding: 110px 100px 0;
-      overflow: hidden;
+      overflow-x: clip;
+      overflow-y: visible;
+      -webkit-font-smoothing: subpixel-antialiased;
+      -moz-osx-font-smoothing: auto;
+      text-rendering: optimizeLegibility;
     }
 
     .countdown-section > footer {
@@ -1261,6 +1408,8 @@
       text-align: center;
       padding: 28px 24px calc(32px + env(safe-area-inset-bottom, 0px));
       border-top: 1px solid rgba(255,255,255,0.15);
+      -webkit-font-smoothing: subpixel-antialiased;
+      -moz-osx-font-smoothing: auto;
     }
 
     footer p {
@@ -1334,7 +1483,14 @@
         margin-right: calc(50% - 50vw);
       }
       .schedule { padding: 80px 40px; }
-      .schedule-items { flex-direction: column; }
+      .schedule-items {
+        flex-direction: column;
+        align-items: center;
+      }
+      .schedule-item {
+        width: 100%;
+        max-width: 28rem;
+      }
       .faq { padding: 80px 40px; }
       .countdown-section { padding: 80px 40px 0; }
       .countdown-unit { width: 160px; }
@@ -1373,6 +1529,15 @@
         min-height: 280px;
         aspect-ratio: 1 / 1;
       }
+      .countdown-timer {
+        flex-direction: column;
+        align-items: center;
+        gap: 48px;
+      }
+      .countdown-unit {
+        width: auto;
+        max-width: 100%;
+      }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -1388,6 +1553,22 @@
         transition: none;
       }
       .hero-collage-wrap, .hero-more-arrow, .hero-title, .hero-heading { transition: none !important; }
+      .schedule-icon-wrap:hover .schedule-icon {
+        transform: none;
+        filter: none;
+      }
+      .schedule-icon {
+        transition: none;
+      }
+      .gift-icon-wrap:hover img {
+        transform: none;
+      }
+      .gift-icon-wrap img {
+        transition: none;
+      }
+      .hero--carousel .hero-carousel-ff {
+        display: none;
+      }
     }
   </style>
 </head>
@@ -1412,22 +1593,40 @@
   <!-- HERO — Long-hero PNG strip; autoscroll + horizontal scroll (duplicate set loops seamlessly) -->
   <section class="hero hero--carousel" id="hero">
     <div class="hero-inner hero-carousel-inner">
-      <div class="hero-carousel-viewport" id="heroCarouselViewport" aria-label="Wedding photos — autoscrolling gallery; scroll horizontally to explore" tabindex="0">
+      <div class="hero-carousel-viewport" id="heroCarouselViewport" aria-label="Wedding photos: autoscrolling gallery">
         <div class="hero-carousel-track" id="heroCarouselTrack">
           <div class="hero-carousel-set">
             <img src="Long-hero-1.png" alt="" width="800" height="1200" loading="eager" fetchpriority="high" decoding="async" />
             <img src="Long-hero-2.png" alt="" width="800" height="1200" loading="eager" decoding="async" />
             <img src="Long-hero-3.png" alt="" width="800" height="1200" loading="eager" decoding="async" />
             <img src="Long-hero-4.png" alt="" width="800" height="1200" loading="eager" decoding="async" />
+            <img src="Long-hero-7.png" alt="" width="800" height="1200" loading="lazy" decoding="async" />
+            <img src="Long-hero-8.png" alt="" width="800" height="1200" loading="lazy" decoding="async" />
+            <img src="Long-hero-9.png" alt="" width="800" height="1200" loading="lazy" decoding="async" />
+            <img src="Long-hero-10.png" alt="" width="800" height="1200" loading="lazy" decoding="async" />
           </div>
           <div class="hero-carousel-set" aria-hidden="true">
             <img src="Long-hero-1.png" alt="" width="800" height="1200" loading="eager" decoding="async" />
             <img src="Long-hero-2.png" alt="" width="800" height="1200" loading="eager" decoding="async" />
             <img src="Long-hero-3.png" alt="" width="800" height="1200" loading="eager" decoding="async" />
             <img src="Long-hero-4.png" alt="" width="800" height="1200" loading="eager" decoding="async" />
+            <img src="Long-hero-7.png" alt="" width="800" height="1200" loading="lazy" decoding="async" />
+            <img src="Long-hero-8.png" alt="" width="800" height="1200" loading="lazy" decoding="async" />
+            <img src="Long-hero-9.png" alt="" width="800" height="1200" loading="lazy" decoding="async" />
+            <img src="Long-hero-10.png" alt="" width="800" height="1200" loading="lazy" decoding="async" />
           </div>
         </div>
       </div>
+      <button
+        type="button"
+        class="hero-carousel-ff"
+        id="heroCarouselFastForward"
+        aria-label="Hold to speed up the photo slideshow"
+      >
+        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path fill="currentColor" d="M4 6 L11 12 L4 18 Z M12 6 L19 12 L12 18 Z" />
+        </svg>
+      </button>
       <div class="hero-heading">
         <h1 class="hero-title">ANNA &amp; DAVID</h1>
         <p class="hero-tagline">are <em>finally</em> getting married</p>
@@ -1458,24 +1657,49 @@
   <!-- SCHEDULE -->
   <section class="schedule" id="schedule">
     <div class="schedule-header" data-reveal>
-      <h2 class="section-title">Our Schedule</h2>
-      <p class="section-subtitle">Event times will be updated on this website closer to the event date. We'll send another email as a reminder closer to the date.</p>
+      <h2 class="section-title">Schedule</h2>
+      <p class="section-subtitle">Key times are below. Make sure to reference this website closer to the event date for updated times.</p>
     </div>
     <div class="schedule-items">
       <div class="schedule-item" data-reveal>
-        <img class="schedule-icon" src="Ceremony.png" alt="Ceremony" />
-        <p class="schedule-item-title">Ceremony</p>
-        <p class="schedule-item-desc">Exchange vows in the lush vineyards of the private estate</p>
+        <div class="schedule-icon-wrap">
+          <img class="schedule-icon schedule-icon--arrival" src="arrival.png?v=20260503" alt="" />
+        </div>
+        <div class="schedule-item-head">
+          <p class="schedule-item-title">Arrival</p>
+          <p class="schedule-item-time">4:00 pm</p>
+        </div>
+        <p class="schedule-item-desc">Welcome to Lincoln Estate. Find your seat, say hello, and settle in before the ceremony.</p>
       </div>
       <div class="schedule-item" data-reveal>
-        <img class="schedule-icon" src="Cocktail.png" alt="Cocktail" />
-        <p class="schedule-item-title">Cocktail</p>
-        <p class="schedule-item-desc">Sip and savour small bites as we celebrate the start of a new chapter</p>
+        <div class="schedule-icon-wrap">
+          <img class="schedule-icon" src="Ceremony.png" alt="" />
+        </div>
+        <div class="schedule-item-head">
+          <p class="schedule-item-title">Ceremony</p>
+          <p class="schedule-item-time">5:00 pm</p>
+        </div>
+        <p class="schedule-item-desc">Exchange of vows in the lush vineyard of the private estate</p>
       </div>
       <div class="schedule-item" data-reveal>
-        <img class="schedule-icon" src="Reception.png" alt="Reception" />
-        <p class="schedule-item-title">Reception</p>
-        <p class="schedule-item-desc">Revel in a sumptuous feast, followed by an evening of dancing and speeches</p>
+        <div class="schedule-icon-wrap">
+          <img class="schedule-icon" src="Cocktail.png" alt="" />
+        </div>
+        <div class="schedule-item-head">
+          <p class="schedule-item-title">Cocktail</p>
+          <p class="schedule-item-time">6:00 pm</p>
+        </div>
+        <p class="schedule-item-desc">Sip, mingle, and celebrate with us over drinks and small bites</p>
+      </div>
+      <div class="schedule-item" data-reveal>
+        <div class="schedule-icon-wrap">
+          <img class="schedule-icon" src="Reception.png" alt="" />
+        </div>
+        <div class="schedule-item-head">
+          <p class="schedule-item-title">Dinner</p>
+          <p class="schedule-item-time">7:00 pm</p>
+        </div>
+        <p class="schedule-item-desc">Dinner, dancing, and toasts to the next chapter</p>
       </div>
     </div>
   </section>
@@ -1488,11 +1712,11 @@
         Anna and David met in Grade 10 with a first date at a very questionable Chinese restaurant. From high school to the University of Waterloo, their paths have always stayed aligned. They love traveling the world together while searching for the best hikes and food spots.
       </p>
       <p class="story-text">
-        Fifteen years later, they've grown up side by side, share a home, and adopted an adorable little bichonpoo (Mimi). Now, they're ready to tie the knot and celebrate the next chapter with everyone who has been apart of their journey ❤️
+        Fifteen years later, they've grown up side by side, share a home together, and adopted an adorable little bichonpoo (Mimi). Now, they're ready to tie the knot and celebrate with their favourite people! ❤️
       </p>
     </div>
     <div class="story-image" data-reveal>
-      <img src="our-story.jpg" alt="Anna and David" loading="lazy" />
+      <img src="our-story-alt.jpg" alt="Anna and David" loading="lazy" />
     </div>
   </section>
 
@@ -1500,10 +1724,11 @@
   <section class="gift" id="registry">
     <div class="gift-inner" data-reveal>
       <h2 class="section-title">Gifts</h2>
-      <p class="gift-lead">Your presence is the greatest blessing to us.<br />
-        Should you wish to give a gift, a monetary contribution would be sincerely appreciated.</p>
+      <p class="gift-lead">Your presence is the greatest blessing to us. Should you wish to give a gift, a monetary contribution would be sincerely appreciated.</p>
       <div class="gift-icon">
-        <img src="Gift.png?v=1774236155" width="90" height="90" alt="" loading="lazy" decoding="async" />
+        <div class="gift-icon-wrap">
+          <img src="Gift.png?v=1774236155" width="90" height="90" alt="" loading="lazy" decoding="async" />
+        </div>
       </div>
     </div>
   </section>
@@ -1514,33 +1739,23 @@
       <h2 class="section-title">Travel</h2>
       <div>
         <p class="travel-text">
-          The drive back to Toronto will take around <em>1h&nbsp;15min.</em> If you're enjoying the wine, please arrange a ride or stay the night.
+          Please allow about <b>1h&nbsp;30min to 2h</b> when travelling from Toronto to the venue, depending on traffic. At night, when there's less traffic, it's about <b>1h&nbsp;15min</b> back to Toronto. If you're planning to enjoy the wine (and we hope you do!), please arrange a ride or consider staying the night nearby.
+        </p>
+        <p class="travel-text">
+          If you're flying in, the closest major airport is <a class="travel-inline-map" href="https://www.google.com/maps/search/?api=1&amp;query=Toronto+Pearson+International+Airport+YYZ" target="_blank" rel="noopener noreferrer">Toronto Pearson</a> (YYZ) in Mississauga. From there, expect a similar drive to the venue as from Toronto.
         </p>
       </div>
       <h3 class="section-title">Stays</h3>
+      <p class="travel-text">
+        If you're looking for accommodations, we'll be staying at the <a class="travel-inline-map" href="https://www.google.com/maps/search/?api=1&amp;query=Four+Points+by+Sheraton+Hamilton+Ontario+Canada" target="_blank" rel="noopener noreferrer">Four Points by Sheraton Hamilton</a> and have secured a hotel block there. Please contact us for more info.
+      </p>
       <div class="hotel-list">
-        <a
-          class="hotel-item hotel-item--link"
-          href="https://www.google.com/maps/search/?api=1&amp;query=Holiday+Inn+%26+Suites+St.+Catharines+IHG+Hotel+Ontario+Canada"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Holiday Inn &amp; Suites St. Catharines — open in Google Maps"
-          data-reveal
-        >
-          <div class="hotel-icon">
-            <img src="Hotel.svg" alt="" width="30" height="30" loading="lazy" decoding="async" />
-          </div>
-          <div>
-            <p class="hotel-name"><span class="hotel-name-underline">Holiday Inn &amp; Suites St. Catharines, an IHG Hotel</span></p>
-            <p class="hotel-distance">15min drive from Venue</p>
-          </div>
-        </a>
         <a
           class="hotel-item hotel-item--link"
           href="https://www.google.com/maps/search/?api=1&amp;query=Four+Points+by+Sheraton+Hamilton+Ontario+Canada"
           target="_blank"
           rel="noopener noreferrer"
-          aria-label="Four Points by Sheraton Hamilton — open in Google Maps"
+          aria-label="Four Points by Sheraton Hamilton, opens in Google Maps"
           data-reveal
         >
           <div class="hotel-icon">
@@ -1549,6 +1764,22 @@
           <div>
             <p class="hotel-name"><span class="hotel-name-underline">Four Points by Sheraton Hamilton</span> <em>(We're staying here)</em></p>
             <p class="hotel-distance">30min drive from Venue</p>
+          </div>
+        </a>
+        <a
+          class="hotel-item hotel-item--link"
+          href="https://www.google.com/maps/search/?api=1&amp;query=Holiday+Inn+%26+Suites+St.+Catharines+IHG+Hotel+Ontario+Canada"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Holiday Inn &amp; Suites St. Catharines, opens in Google Maps"
+          data-reveal
+        >
+          <div class="hotel-icon">
+            <img src="Hotel.svg" alt="" width="30" height="30" loading="lazy" decoding="async" />
+          </div>
+          <div>
+            <p class="hotel-name"><span class="hotel-name-underline">Holiday Inn &amp; Suites St. Catharines, an IHG Hotel</span></p>
+            <p class="hotel-distance">15min drive from Venue</p>
           </div>
         </a>
       </div>
@@ -1561,7 +1792,7 @@
   <!-- FAQ -->
   <section class="faq" id="faq">
     <div class="faq-inner" data-reveal>
-      <h2 class="section-title" style="color:var(--black); font-size:56px;">Frequently Questions &amp; Answers</h2>
+      <h2 class="section-title" style="color:var(--black); font-size:56px;">Questions &amp; Answers</h2>
       <div class="faq-list" data-reveal>
 
         <details class="faq-item" data-reveal>
@@ -1601,7 +1832,7 @@
               <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
             </span>
           </summary>
-          <p class="faq-answer">Cocktail attire, whimsical garden theme.</p>
+          <p class="faq-answer">Cocktail attire with a whimsical garden feel.</p>
         </details>
 
         <details class="faq-item" data-reveal>
@@ -1631,18 +1862,23 @@
               <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
             </span>
           </summary>
-          <p class="faq-answer">We kindly ask that phones and cameras be tucked away during the ceremony. After the ceremony, you're free to take as many photos.</p>
+          <p class="faq-answer">We'd love for everyone to be fully present during the ceremony, so please keep phones tucked away. After that, snap away!</p>
         </details>
 
       </div>
+      <p class="faq-outro" data-reveal>If you have any questions, feel free to message Anna or David.</p>
     </div>
   </section>
 
   <!-- COUNTDOWN -->
   <section class="countdown-section" id="countdown">
     <div class="countdown-inner" data-reveal>
-      <h2 class="countdown-title">Let the countdown begin</h2>
+      <h2 class="countdown-title">See you soon</h2>
       <div class="countdown-timer">
+        <div class="countdown-unit">
+          <span class="countdown-number" id="cd-months">00</span>
+          <span class="countdown-label">MONTHS</span>
+        </div>
         <div class="countdown-unit">
           <span class="countdown-number" id="cd-days">169</span>
           <span class="countdown-label">DAYS</span>
@@ -1677,20 +1913,41 @@
     // ── Countdown ──
     const weddingDate = new Date('2026-09-05T14:00:00');
 
+    function addOneCalendarMonth(d) {
+      const out = new Date(d.getTime());
+      const day = out.getDate();
+      out.setMonth(out.getMonth() + 1);
+      if (out.getDate() !== day && day > out.getDate()) {
+        out.setDate(0);
+      }
+      return out;
+    }
+
     function updateCountdown() {
       const now = new Date();
       const diff = weddingDate - now;
       if (diff <= 0) {
+        document.getElementById('cd-months').textContent = '00';
         document.getElementById('cd-days').textContent = '00';
         document.getElementById('cd-hours').textContent = '00';
         document.getElementById('cd-minutes').textContent = '00';
         document.getElementById('cd-seconds').textContent = '00';
         return;
       }
-      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+      let months = 0;
+      let cursor = new Date(now.getTime());
+      for (;;) {
+        const next = addOneCalendarMonth(cursor);
+        if (next > weddingDate) break;
+        cursor = next;
+        months++;
+      }
+      const remainder = weddingDate - cursor;
+      const days = Math.floor(remainder / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((remainder % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((remainder % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((remainder % (1000 * 60)) / 1000);
+      document.getElementById('cd-months').textContent = String(months).padStart(2, '0');
       document.getElementById('cd-days').textContent = String(days).padStart(2, '0');
       document.getElementById('cd-hours').textContent = String(hours).padStart(2, '0');
       document.getElementById('cd-minutes').textContent = String(minutes).padStart(2, '0');
@@ -1946,7 +2203,7 @@
       update();
     })();
 
-    // ── Hero carousel: PNG strip, autoscroll + native horizontal scroll, seamless loop ──
+    // ── Hero carousel: PNG strip, autoscroll only, seamless loop (scrollLeft driven; viewport not user-scrollable) ──
     (function setupHeroCarousel() {
       const hero = document.querySelector('.hero--carousel');
       if (!hero) return;
@@ -1960,11 +2217,11 @@
 
       const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       const sets = track.querySelectorAll('.hero-carousel-set');
-      const autoSpeed = reduceMotion ? 0 : 1.05;
+      const baseSpeed = reduceMotion ? 0 : 1.05;
+      const fastMultiplier = 4;
       let segmentW = 0;
       let rafId = 0;
-      let pauseAuto = false;
-      let resumeTimer = 0;
+      let fastForwardHeld = false;
 
       function measure() {
         if (sets[0]) segmentW = sets[0].getBoundingClientRect().width;
@@ -1978,18 +2235,10 @@
         if (sl !== viewport.scrollLeft) viewport.scrollLeft = sl;
       }
 
-      function bumpAutoPause() {
-        pauseAuto = true;
-        if (resumeTimer) clearTimeout(resumeTimer);
-        resumeTimer = window.setTimeout(() => {
-          pauseAuto = false;
-          resumeTimer = 0;
-        }, 2800);
-      }
-
       function tick() {
-        if (!pauseAuto && autoSpeed > 0 && segmentW > 0) {
-          viewport.scrollLeft += autoSpeed;
+        const step = baseSpeed > 0 && segmentW > 0 ? (fastForwardHeld ? baseSpeed * fastMultiplier : baseSpeed) : 0;
+        if (step > 0) {
+          viewport.scrollLeft += step;
           if (viewport.scrollLeft >= segmentW) viewport.scrollLeft -= segmentW;
         }
         rafId = requestAnimationFrame(tick);
@@ -2024,46 +2273,49 @@
         if (document.hidden) {
           if (rafId) cancelAnimationFrame(rafId);
           rafId = 0;
+          fastForwardHeld = false;
         } else if (!rafId) {
           rafId = requestAnimationFrame(tick);
         }
       });
 
-      viewport.addEventListener('pointerdown', bumpAutoPause);
-      viewport.addEventListener('touchstart', bumpAutoPause, { passive: true });
       viewport.addEventListener('scroll', () => wrapScroll(), { passive: true });
 
-      viewport.addEventListener('keydown', e => {
-        bumpAutoPause();
-        const step = Math.min(480, viewport.clientWidth * 0.75);
-        if (e.key === 'ArrowLeft') {
+      const ffBtn = document.getElementById('heroCarouselFastForward');
+      if (ffBtn && baseSpeed > 0) {
+        const startFast = () => {
+          fastForwardHeld = true;
+        };
+        const endFast = () => {
+          fastForwardHeld = false;
+        };
+        ffBtn.addEventListener('pointerdown', e => {
+          if (e.button !== 0 && e.pointerType === 'mouse') return;
           e.preventDefault();
-          viewport.scrollBy({ left: -step, behavior: 'smooth' });
-        } else if (e.key === 'ArrowRight') {
-          e.preventDefault();
-          viewport.scrollBy({ left: step, behavior: 'smooth' });
-        }
-      });
-
-      // Shift + vertical wheel scrolls the strip horizontally; plain wheel still scrolls the page
-      viewport.addEventListener(
-        'wheel',
-        e => {
-          if (e.shiftKey && Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
-            const max = viewport.scrollWidth - viewport.clientWidth;
-            if (max <= 0) return;
-            bumpAutoPause();
+          startFast();
+          try {
+            ffBtn.setPointerCapture(e.pointerId);
+          } catch (_) {}
+        });
+        ffBtn.addEventListener('pointerup', endFast);
+        ffBtn.addEventListener('pointercancel', endFast);
+        ffBtn.addEventListener('lostpointercapture', endFast);
+        window.addEventListener('pointerup', endFast);
+        window.addEventListener('blur', endFast);
+        ffBtn.addEventListener('keydown', e => {
+          if (e.code === 'Space' || e.code === 'Enter') {
             e.preventDefault();
-            viewport.scrollLeft += e.deltaY;
-            wrapScroll();
-            return;
+            startFast();
           }
-          if (Math.abs(e.deltaX) > Math.abs(e.deltaY) * 1.1) {
-            bumpAutoPause();
+        });
+        ffBtn.addEventListener('keyup', e => {
+          if (e.code === 'Space' || e.code === 'Enter') {
+            e.preventDefault();
+            endFast();
           }
-        },
-        { passive: false }
-      );
+        });
+        ffBtn.addEventListener('blur', endFast);
+      }
     })();
 
     // ── Scroll Reveal: mark in-view immediately (no IO — avoids class toggles / repaints while scrolling) ──
