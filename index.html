@@ -78,7 +78,7 @@
       padding: var(--nav-padding-top) 40px 0 40px;
       background: transparent;
       backdrop-filter: none;
-      transition: transform 0.35s cubic-bezier(0.2, 0.9, 0.2, 1);
+      transition: transform 0.35s cubic-bezier(0.2, 0.9, 0.2, 1), background 0.28s ease;
       will-change: transform;
     }
 
@@ -1704,6 +1704,10 @@
     }
 
     @media (max-width: 768px) {
+      /* Solid bar when the bar is over cream/light sections (past hero); hero stays transparent via setupNavTheme */
+      nav.nav--light-bg {
+        background: var(--cream);
+      }
       .nav-links { display: none; }
       .nav-rsvp--desktop { display: none !important; }
       .nav-menu-toggle {
@@ -2146,10 +2150,6 @@
           <span class="countdown-number" id="cd-minutes">00</span>
           <span class="countdown-label">MINUTES</span>
         </div>
-        <div class="countdown-unit">
-          <span class="countdown-number" id="cd-seconds">00</span>
-          <span class="countdown-label">SECONDS</span>
-        </div>
       </div>
       <a href="https://withjoy.com/david-anna-sep5/rsvp" class="btn-outline-white" target="_blank" rel="noopener noreferrer">RSVP</a>
     </div>
@@ -2166,47 +2166,55 @@
 
   <script>
     // ── Countdown ──
-    const weddingDate = new Date('2026-09-05T14:00:00');
+    /* 4:00 PM Eastern — Sept is daylight time (EDT, −04:00). For strict EST (−05:00) use T16:00:00-05:00 */
+    const weddingDate = new Date('2026-09-05T16:00:00-04:00');
 
-    function addOneCalendarMonth(d) {
-      const out = new Date(d.getTime());
-      const day = out.getDate();
-      out.setMonth(out.getMonth() + 1);
-      if (out.getDate() !== day && day > out.getDate()) {
-        out.setDate(0);
+    /** Local calendar diff with borrowing; day count respects 28/29/30/31-day months. */
+    function calendarDiffComponents(from, to) {
+      if (to.getTime() <= from.getTime()) {
+        return { months: 0, days: 0, hours: 0, minutes: 0 };
       }
-      return out;
+      let y = to.getFullYear() - from.getFullYear();
+      let mo = to.getMonth() - from.getMonth();
+      let d = to.getDate() - from.getDate();
+      let h = to.getHours() - from.getHours();
+      let mi = to.getMinutes() - from.getMinutes();
+
+      if (mi < 0) {
+        mi += 60;
+        h--;
+      }
+      if (h < 0) {
+        h += 24;
+        d--;
+      }
+      if (d < 0) {
+        const daysInMonthBeforeTo = new Date(to.getFullYear(), to.getMonth(), 0).getDate();
+        d += daysInMonthBeforeTo;
+        mo--;
+      }
+      if (mo < 0) {
+        mo += 12;
+        y--;
+      }
+      const months = y * 12 + mo;
+      return { months, days: d, hours: h, minutes: mi };
     }
 
     function updateCountdown() {
       const now = new Date();
-      const diff = weddingDate - now;
-      if (diff <= 0) {
+      if (weddingDate - now <= 0) {
         document.getElementById('cd-months').textContent = '00';
         document.getElementById('cd-days').textContent = '00';
         document.getElementById('cd-hours').textContent = '00';
         document.getElementById('cd-minutes').textContent = '00';
-        document.getElementById('cd-seconds').textContent = '00';
         return;
       }
-      let months = 0;
-      let cursor = new Date(now.getTime());
-      for (;;) {
-        const next = addOneCalendarMonth(cursor);
-        if (next > weddingDate) break;
-        cursor = next;
-        months++;
-      }
-      const remainder = weddingDate - cursor;
-      const days = Math.floor(remainder / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((remainder % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((remainder % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((remainder % (1000 * 60)) / 1000);
+      const { months, days, hours, minutes } = calendarDiffComponents(now, weddingDate);
       document.getElementById('cd-months').textContent = String(months).padStart(2, '0');
       document.getElementById('cd-days').textContent = String(days).padStart(2, '0');
       document.getElementById('cd-hours').textContent = String(hours).padStart(2, '0');
       document.getElementById('cd-minutes').textContent = String(minutes).padStart(2, '0');
-      document.getElementById('cd-seconds').textContent = String(seconds).padStart(2, '0');
     }
 
     updateCountdown();
@@ -2580,13 +2588,14 @@
       });
     })();
 
-    // ── Nav: after hero end-state, hide on scroll down / show on scroll up (desktop only) ──
-    // ≤768px: bar stays visible. In-page # clicks keep the bar visible until scroll ends.
+    // ── Nav: after hero end-state, hide on scroll down / show on scroll up (desktop + mobile) ──
+    // When the bar reappears on scroll-up: transparent over the hero, cream bar on light sections (mobile CSS).
+    // In-page # clicks keep the bar visible until scroll ends. Menu open: bar stays visible.
     (function setupNavScrollHide() {
       const nav = document.querySelector('nav');
       if (!nav) return;
 
-      const navAlwaysVisibleMq = window.matchMedia('(max-width: 768px)');
+      const mobileNavMq = window.matchMedia('(max-width: 768px)');
 
       let lastY = window.scrollY;
       let ticking = false;
@@ -2633,13 +2642,13 @@
         const y = window.scrollY;
         const afterHeroMorph = document.documentElement.classList.contains('hero-morph-complete');
 
-        if (!afterHeroMorph) {
+        if (nav.classList.contains('nav--menu-open')) {
           nav.classList.remove('nav--hidden');
           lastY = y;
           return;
         }
 
-        if (navAlwaysVisibleMq.matches) {
+        if (!afterHeroMorph) {
           nav.classList.remove('nav--hidden');
           lastY = y;
           return;
@@ -2679,14 +2688,14 @@
         apply();
       });
 
-      function onNavAlwaysVisibleMqChange() {
-        if (navAlwaysVisibleMq.matches) nav.classList.remove('nav--hidden');
+      function onMobileNavMqChange() {
+        if (mobileNavMq.matches) nav.classList.remove('nav--hidden');
         lastY = window.scrollY;
       }
-      if (navAlwaysVisibleMq.addEventListener) {
-        navAlwaysVisibleMq.addEventListener('change', onNavAlwaysVisibleMqChange);
-      } else if (navAlwaysVisibleMq.addListener) {
-        navAlwaysVisibleMq.addListener(onNavAlwaysVisibleMqChange);
+      if (mobileNavMq.addEventListener) {
+        mobileNavMq.addEventListener('change', onMobileNavMqChange);
+      } else if (mobileNavMq.addListener) {
+        mobileNavMq.addListener(onMobileNavMqChange);
       }
 
       requestAnimationFrame(() => {
