@@ -561,15 +561,11 @@
       object-position: center center;
     }
 
-    .hero--carousel .hero-carousel-controls {
+      .hero--carousel .hero-carousel-controls {
       position: absolute;
       right: clamp(16px, 4vw, 28px);
       bottom: clamp(20px, 5vh, 36px);
       z-index: 4;
-      display: flex;
-      flex-direction: row-reverse;
-      align-items: center;
-      gap: 12px;
     }
 
     .hero--carousel .hero-carousel-btn {
@@ -1808,9 +1804,6 @@
       .gift-icon-wrap img {
         transition: none;
       }
-      .hero--carousel .hero-carousel-ff {
-        display: none;
-      }
       .nav-mobile-panel {
         transition: none;
       }
@@ -1910,16 +1903,6 @@
         </div>
       </div>
       <div class="hero-carousel-controls">
-        <button
-          type="button"
-          class="hero-carousel-btn hero-carousel-ff"
-          id="heroCarouselFastForward"
-          aria-label="Hold to speed up the photo slideshow"
-        >
-          <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-            <path fill="currentColor" d="M4 6 L11 12 L4 18 Z M12 6 L19 12 L12 18 Z" />
-          </svg>
-        </button>
         <button
           type="button"
           class="hero-carousel-btn hero-carousel-photos"
@@ -2103,7 +2086,7 @@
               <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
             </span>
           </summary>
-          <p class="faq-answer">Please Please RSVP by August 1, 2026 so we can have an accurate headcount.</p>
+          <p class="faq-answer">Please RSVP by August 1, 2026, so we can have an accurate headcount.</p>
         </details>
 
         <details class="faq-item" name="faq" data-reveal>
@@ -2516,10 +2499,8 @@
       const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       const sets = track.querySelectorAll('.hero-carousel-set');
       const baseSpeed = reduceMotion ? 0 : 1.05;
-      const fastMultiplier = 4;
       let segmentW = 0;
       let rafId = 0;
-      let fastForwardHeld = false;
 
       function measure() {
         if (sets[0]) segmentW = sets[0].getBoundingClientRect().width;
@@ -2534,7 +2515,7 @@
       }
 
       function tick() {
-        const step = baseSpeed > 0 && segmentW > 0 ? (fastForwardHeld ? baseSpeed * fastMultiplier : baseSpeed) : 0;
+        const step = baseSpeed > 0 && segmentW > 0 ? baseSpeed : 0;
         if (step > 0) {
           viewport.scrollLeft += step;
           if (viewport.scrollLeft >= segmentW) viewport.scrollLeft -= segmentW;
@@ -2571,49 +2552,12 @@
         if (document.hidden) {
           if (rafId) cancelAnimationFrame(rafId);
           rafId = 0;
-          fastForwardHeld = false;
         } else if (!rafId) {
           rafId = requestAnimationFrame(tick);
         }
       });
 
       viewport.addEventListener('scroll', () => wrapScroll(), { passive: true });
-
-      const ffBtn = document.getElementById('heroCarouselFastForward');
-      if (ffBtn && baseSpeed > 0) {
-        const startFast = () => {
-          fastForwardHeld = true;
-        };
-        const endFast = () => {
-          fastForwardHeld = false;
-        };
-        ffBtn.addEventListener('pointerdown', e => {
-          if (e.button !== 0 && e.pointerType === 'mouse') return;
-          e.preventDefault();
-          startFast();
-          try {
-            ffBtn.setPointerCapture(e.pointerId);
-          } catch (_) {}
-        });
-        ffBtn.addEventListener('pointerup', endFast);
-        ffBtn.addEventListener('pointercancel', endFast);
-        ffBtn.addEventListener('lostpointercapture', endFast);
-        window.addEventListener('pointerup', endFast);
-        window.addEventListener('blur', endFast);
-        ffBtn.addEventListener('keydown', e => {
-          if (e.code === 'Space' || e.code === 'Enter') {
-            e.preventDefault();
-            startFast();
-          }
-        });
-        ffBtn.addEventListener('keyup', e => {
-          if (e.code === 'Space' || e.code === 'Enter') {
-            e.preventDefault();
-            endFast();
-          }
-        });
-        ffBtn.addEventListener('blur', endFast);
-      }
     })();
 
     // ── Hero: view photos lightbox ──
