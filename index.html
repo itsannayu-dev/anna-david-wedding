@@ -6,7 +6,7 @@
   <title>Anna & David · September 5, 2026</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Figtree:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Figtree:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600;1,700&display=swap" rel="stylesheet" />
   <style>
     @font-face { font-family: "Editor's Note"; src: url('EditorsNote-Hairline-iF664322be4e4fb.otf') format('opentype'); font-weight: 100; font-style: normal; }
     @font-face { font-family: "Editor's Note"; src: url('EditorsNote-HairlineItalic-iF664322be52ef6.otf') format('opentype'); font-weight: 100; font-style: italic; }
@@ -444,7 +444,7 @@
       left: 50%;
       transform: translate(-50%, -50%);
       font-family: var(--serif);
-      font-weight: 200;
+      font-weight: 300;
       font-style: italic;
       font-size: clamp(60px, 8vw, 100px);
       color: var(--white);
@@ -561,11 +561,18 @@
       object-position: center center;
     }
 
-    .hero--carousel .hero-carousel-ff {
+    .hero--carousel .hero-carousel-controls {
       position: absolute;
       right: clamp(16px, 4vw, 28px);
       bottom: clamp(20px, 5vh, 36px);
       z-index: 4;
+      display: flex;
+      flex-direction: row-reverse;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .hero--carousel .hero-carousel-btn {
       width: 48px;
       height: 48px;
       padding: 0;
@@ -578,22 +585,120 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      flex-shrink: 0;
       transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
       -webkit-tap-highlight-color: transparent;
     }
 
-    .hero--carousel .hero-carousel-ff:hover {
+    .hero--carousel .hero-carousel-btn:hover {
       background: rgba(0, 0, 0, 0.52);
       border-color: rgba(255, 255, 255, 0.65);
     }
 
-    .hero--carousel .hero-carousel-ff:active {
+    .hero--carousel .hero-carousel-btn:active {
       transform: scale(0.95);
     }
 
-    .hero--carousel .hero-carousel-ff:focus-visible {
+    .hero--carousel .hero-carousel-btn:focus-visible {
       outline: 2px solid rgba(255, 255, 255, 0.85);
       outline-offset: 3px;
+    }
+
+    .hero-photo-lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      padding: clamp(16px, 4vw, 28px);
+      padding-top: calc(clamp(16px, 4vw, 28px) + env(safe-area-inset-top, 0px));
+      padding-bottom: calc(clamp(16px, 4vw, 28px) + env(safe-area-inset-bottom, 0px));
+      box-sizing: border-box;
+      background: rgba(0, 0, 0, 0.92);
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 0.25s ease, visibility 0.25s ease;
+    }
+
+    .hero-photo-lightbox.is-open {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    .hero-photo-lightbox-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+      margin-bottom: 16px;
+      gap: 16px;
+    }
+
+    .hero-photo-lightbox-title {
+      font-family: var(--sans);
+      font-weight: 300;
+      font-size: clamp(18px, 2.5vw, 22px);
+      letter-spacing: 0.4px;
+      color: var(--light-text);
+      margin: 0;
+    }
+
+    .hero-photo-lightbox-close {
+      width: 48px;
+      height: 48px;
+      padding: 0;
+      margin: 0;
+      border: 1px solid rgba(255, 255, 255, 0.42);
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.38);
+      color: rgba(255, 255, 255, 0.95);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .hero-photo-lightbox-close:hover {
+      background: rgba(0, 0, 0, 0.52);
+      border-color: rgba(255, 255, 255, 0.65);
+    }
+
+    .hero-photo-lightbox-close:active {
+      transform: scale(0.95);
+    }
+
+    .hero-photo-lightbox-close:focus-visible {
+      outline: 2px solid rgba(255, 255, 255, 0.85);
+      outline-offset: 3px;
+    }
+
+    .hero-photo-lightbox-scroll {
+      flex: 1;
+      min-height: 0;
+      overflow-y: auto;
+      overflow-x: hidden;
+      -webkit-overflow-scrolling: touch;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      padding-bottom: 8px;
+    }
+
+    .hero-photo-lightbox-scroll img {
+      display: block;
+      width: min(520px, 100%);
+      max-width: 100%;
+      height: auto;
+      max-height: min(78vh, 900px);
+      object-fit: contain;
+      border-radius: 4px;
     }
 
     .hero--carousel .hero-title,
@@ -983,7 +1088,7 @@
 
     .schedule-item-time {
       font-family: var(--sans);
-      font-weight: 300;
+      font-weight: 600;
       font-style: normal;
       font-size: 20px;
       color: var(--light-text);
@@ -1325,77 +1430,6 @@
       text-decoration: underline;
     }
 
-    .hotel-list {
-      display: flex;
-      flex-direction: column;
-      gap: 32px;
-    }
-
-    .hotel-item {
-      display: flex;
-      gap: 8px;
-      align-items: flex-start;
-      transition: transform 0.25s ease;
-      text-decoration: none;
-      color: inherit;
-      box-sizing: border-box;
-      cursor: pointer;
-    }
-
-    .hotel-item:hover {
-      transform: translateX(6px);
-    }
-
-    /* Animated underline on hotel name (hover entire stay row); scope with .hotel-name-underline */
-    .hotel-item--link .hotel-name-underline {
-      background-image: linear-gradient(currentColor, currentColor);
-      background-position: 0 100%;
-      background-repeat: no-repeat;
-      background-size: 0% 1px;
-      transition: background-size 0.35s ease;
-    }
-
-    .hotel-item--link:hover .hotel-name-underline {
-      background-size: 100% 1px;
-    }
-
-    .hotel-icon {
-      width: 30px;
-      height: 30px;
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--black);
-    }
-
-    .hotel-icon img {
-      width: 30px;
-      height: 30px;
-      display: block;
-    }
-
-    .hotel-name {
-      font-family: var(--sans);
-      font-weight: 400;
-      font-size: 20px;
-      color: var(--black);
-      line-height: 1.3;
-      margin: 0;
-    }
-
-    .hotel-name em {
-      font-style: italic;
-    }
-
-    .hotel-distance {
-      font-family: var(--sans);
-      font-weight: 400;
-      font-size: 16px;
-      color: var(--black);
-      margin: 4px 0 0;
-    }
-
     /* ── FAQ ── */
     .faq {
       background: var(--cream);
@@ -1577,8 +1611,7 @@
 
     /* PNG (RGBA): avoid mix-blend-mode: screen — tuned for old opaque JPG; breaks transparency */
     .countdown-floral {
-      width: 857px;
-      max-width: 100%;
+      width: min(857px, 100%);
       height: auto;
       margin-top: 30px;
       display: block;
@@ -1876,22 +1909,55 @@
           </div>
         </div>
       </div>
-      <button
-        type="button"
-        class="hero-carousel-ff"
-        id="heroCarouselFastForward"
-        aria-label="Hold to speed up the photo slideshow"
-      >
-        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-          <path fill="currentColor" d="M4 6 L11 12 L4 18 Z M12 6 L19 12 L12 18 Z" />
-        </svg>
-      </button>
+      <div class="hero-carousel-controls">
+        <button
+          type="button"
+          class="hero-carousel-btn hero-carousel-ff"
+          id="heroCarouselFastForward"
+          aria-label="Hold to speed up the photo slideshow"
+        >
+          <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path fill="currentColor" d="M4 6 L11 12 L4 18 Z M12 6 L19 12 L12 18 Z" />
+          </svg>
+        </button>
+        <button
+          type="button"
+          class="hero-carousel-btn hero-carousel-photos"
+          id="heroCarouselViewPhotos"
+          aria-label="View photos"
+          aria-haspopup="dialog"
+          aria-controls="heroPhotoLightbox"
+        >
+          <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path fill="currentColor" d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z" />
+          </svg>
+        </button>
+      </div>
       <div class="hero-heading">
         <h1 class="hero-title">ANNA &amp; DAVID</h1>
         <p class="hero-tagline">are <em>finally</em> getting married</p>
       </div>
     </div>
   </section>
+
+  <div
+    class="hero-photo-lightbox"
+    id="heroPhotoLightbox"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="heroPhotoLightboxTitle"
+    hidden
+  >
+    <div class="hero-photo-lightbox-header">
+      <h2 class="hero-photo-lightbox-title" id="heroPhotoLightboxTitle">Photos</h2>
+      <button type="button" class="hero-photo-lightbox-close" id="heroPhotoLightboxClose" aria-label="Close photos">
+        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M6 6 L18 18 M18 6 L6 18" />
+        </svg>
+      </button>
+    </div>
+    <div class="hero-photo-lightbox-scroll" id="heroPhotoLightboxGrid"></div>
+  </div>
 
   <!-- INVITATION -->
   <section class="invitation" id="invitation">
@@ -1998,7 +2064,7 @@
       <h2 class="section-title">Travel</h2>
       <div>
         <p class="travel-text">
-          Please allow about <b>1h&nbsp;30min to 2h</b> when travelling from Toronto to the venue, depending on traffic. At night, when there's less traffic, it's about <b>1h&nbsp;15min</b> back to Toronto. If you're planning to enjoy the wine (and we hope you do!), please arrange a ride or consider staying the night nearby.
+          Travel from Toronto to the venue can be traffic heavy. Please allocate <b>1h&nbsp;30m to 2h</b> to get there. At night, when there's less traffic, it's about <b>1h&nbsp;15min</b> back to Toronto. If you're planning to enjoy the wine (and we hope you do!), please arrange a ride or consider staying the night nearby.
         </p>
         <p class="travel-text">
           If you're flying in, the closest major airport is <a class="travel-inline-map" href="https://www.google.com/maps/search/?api=1&amp;query=Toronto+Pearson+International+Airport+YYZ" target="_blank" rel="noopener noreferrer">Toronto Pearson</a> (YYZ) in Mississauga. From there, expect a similar drive to the venue as from Toronto.
@@ -2006,42 +2072,8 @@
       </div>
       <h3 class="section-title">Stays</h3>
       <p class="travel-text">
-        If you're looking for accommodations, we'll be staying at the <a class="travel-inline-map" href="https://www.google.com/maps/search/?api=1&amp;query=Four+Points+by+Sheraton+Hamilton+Ontario+Canada" target="_blank" rel="noopener noreferrer">Four Points by Sheraton Hamilton</a> and have secured a hotel block there. Please contact us for more info.
+        If you're looking for accommodations, we'll be staying at the <a class="travel-inline-map" href="https://www.google.com/maps/search/?api=1&amp;query=Four+Points+by+Sheraton+Hamilton+Ontario+Canada" target="_blank" rel="noopener noreferrer">Four Points by Sheraton Hamilton</a> (30min drive from venue).
       </p>
-      <div class="hotel-list">
-        <a
-          class="hotel-item hotel-item--link"
-          href="https://www.google.com/maps/search/?api=1&amp;query=Four+Points+by+Sheraton+Hamilton+Ontario+Canada"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Four Points by Sheraton Hamilton, opens in Google Maps"
-          data-reveal
-        >
-          <div class="hotel-icon">
-            <img src="Hotel.svg" alt="" width="30" height="30" loading="lazy" decoding="async" />
-          </div>
-          <div>
-            <p class="hotel-name"><span class="hotel-name-underline">Four Points by Sheraton Hamilton</span> <em>(We're staying here)</em></p>
-            <p class="hotel-distance">30min drive from Venue</p>
-          </div>
-        </a>
-        <a
-          class="hotel-item hotel-item--link"
-          href="https://www.google.com/maps/search/?api=1&amp;query=Holiday+Inn+%26+Suites+St.+Catharines+IHG+Hotel+Ontario+Canada"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Holiday Inn &amp; Suites St. Catharines, opens in Google Maps"
-          data-reveal
-        >
-          <div class="hotel-icon">
-            <img src="Hotel.svg" alt="" width="30" height="30" loading="lazy" decoding="async" />
-          </div>
-          <div>
-            <p class="hotel-name"><span class="hotel-name-underline">Holiday Inn &amp; Suites St. Catharines, an IHG Hotel</span></p>
-            <p class="hotel-distance">15min drive from Venue</p>
-          </div>
-        </a>
-      </div>
     </div>
     <div class="travel-map" data-reveal>
       <img class="map-img" src="map.jpg" alt="Illustrated map showing Lincoln Estates, Hamilton, Mississauga and Toronto" loading="lazy" />
@@ -2054,7 +2086,7 @@
       <h2 class="section-title" style="color:var(--black); font-size:56px;">Questions &amp; Answers</h2>
       <div class="faq-list" data-reveal>
 
-        <details class="faq-item" data-reveal>
+        <details class="faq-item" name="faq" data-reveal>
           <summary class="faq-question">
             <span class="faq-q-text">Can I bring a plus one?</span>
             <span class="faq-chevron">
@@ -2064,7 +2096,7 @@
           <p class="faq-answer">If your invitation includes a plus one, you'll see their name when RSVPing. Didn't receive one but hoping to bring someone? Reach out to us, we'll do our best.</p>
         </details>
 
-        <details class="faq-item" data-reveal>
+        <details class="faq-item" name="faq" data-reveal>
           <summary class="faq-question">
             <span class="faq-q-text">When is the RSVP deadline?</span>
             <span class="faq-chevron">
@@ -2074,7 +2106,7 @@
           <p class="faq-answer">Please RSVP by August 15th, so we can have an accurate headcount.</p>
         </details>
 
-        <details class="faq-item" data-reveal>
+        <details class="faq-item" name="faq" data-reveal>
           <summary class="faq-question">
             <span class="faq-q-text">Is parking available on site?</span>
             <span class="faq-chevron">
@@ -2084,7 +2116,7 @@
           <p class="faq-answer">Yes, complimentary parking is available at the estate. If you plan to enjoy the wine, and we hope you do, please consider carpooling or arranging a ride. Note that it's a 1 hr 15 min drive back to Toronto.</p>
         </details>
 
-        <details class="faq-item" data-reveal>
+        <details class="faq-item" name="faq" data-reveal>
           <summary class="faq-question">
             <span class="faq-q-text">What's the dress code?</span>
             <span class="faq-chevron">
@@ -2094,7 +2126,7 @@
           <p class="faq-answer">Cocktail attire with a whimsical garden feel.</p>
         </details>
 
-        <details class="faq-item" data-reveal>
+        <details class="faq-item" name="faq" data-reveal>
           <summary class="faq-question">
             <span class="faq-q-text">What will the weather be like?</span>
             <span class="faq-chevron">
@@ -2104,7 +2136,7 @@
           <p class="faq-answer">High of 22°C, low of 15°C</p>
         </details>
 
-        <details class="faq-item" data-reveal>
+        <details class="faq-item" name="faq" data-reveal>
           <summary class="faq-question">
             <span class="faq-q-text">Is the wedding indoors or outdoors?</span>
             <span class="faq-chevron">
@@ -2114,7 +2146,7 @@
           <p class="faq-answer">Our wedding ceremony is outdoors, but our reception will be in a tent.</p>
         </details>
 
-        <details class="faq-item" data-reveal>
+        <details class="faq-item" name="faq" data-reveal>
           <summary class="faq-question">
             <span class="faq-q-text">Is it okay to take pictures during the wedding?</span>
             <span class="faq-chevron">
@@ -2155,9 +2187,12 @@
     </div>
     <img
       class="countdown-floral"
-      src="Flora.png?v=1774236180"
+      src="Flora.png?v=1715"
       alt="Floral decoration"
+      width="1715"
+      height="806"
       loading="lazy"
+      decoding="async"
     />
     <footer>
       <p>Anna &amp; David · September 5, 2026 · Lincoln Estates, Ontario</p>
@@ -2581,6 +2616,83 @@
       }
     })();
 
+    // ── Hero: view photos lightbox ──
+    (function setupHeroPhotoLightbox() {
+      const openBtn = document.getElementById('heroCarouselViewPhotos');
+      const lightbox = document.getElementById('heroPhotoLightbox');
+      const grid = document.getElementById('heroPhotoLightboxGrid');
+      const closeBtn = document.getElementById('heroPhotoLightboxClose');
+      const track = document.getElementById('heroCarouselTrack');
+      if (!openBtn || !lightbox || !grid || !closeBtn || !track) return;
+
+      let built = false;
+      let lastFocus = null;
+
+      function appendLightboxImage(src, alt, width, height) {
+        const el = document.createElement('img');
+        el.src = src;
+        el.alt = alt;
+        if (width) el.width = width;
+        if (height) el.height = height;
+        el.loading = 'lazy';
+        el.decoding = 'async';
+        grid.appendChild(el);
+      }
+
+      function heroLightSrc(img) {
+        const file = (img.getAttribute('src') || '').split('/').pop() || '';
+        return file.replace(/(\.(png|jpe?g))$/i, '-light$1');
+      }
+
+      function buildGrid() {
+        if (built) return;
+        const firstSet = track.querySelector('.hero-carousel-set');
+        if (firstSet) {
+          firstSet.querySelectorAll('img').forEach((img, i) => {
+            appendLightboxImage(
+              heroLightSrc(img),
+              `Wedding photo ${i + 1}`,
+              img.width || 800,
+              img.height || 1200
+            );
+          });
+        }
+        built = true;
+      }
+
+      function openLightbox() {
+        buildGrid();
+        lastFocus = document.activeElement;
+        lightbox.hidden = false;
+        lightbox.classList.add('is-open');
+        document.body.style.overflow = 'hidden';
+        window.setTimeout(() => closeBtn.focus({ preventScroll: true }), 40);
+      }
+
+      function closeLightbox() {
+        lightbox.classList.remove('is-open');
+        lightbox.hidden = true;
+        document.body.style.overflow = '';
+        if (lastFocus && typeof lastFocus.focus === 'function') {
+          lastFocus.focus({ preventScroll: true });
+        }
+        lastFocus = null;
+      }
+
+      openBtn.addEventListener('click', () => openLightbox());
+      closeBtn.addEventListener('click', () => closeLightbox());
+      lightbox.addEventListener('click', e => {
+        if (e.target === lightbox) closeLightbox();
+      });
+      document.addEventListener('keydown', e => {
+        if (!lightbox.classList.contains('is-open')) return;
+        if (e.key === 'Escape') {
+          e.preventDefault();
+          closeLightbox();
+        }
+      });
+    })();
+
     // ── Scroll Reveal: mark in-view immediately (no IO — avoids class toggles / repaints while scrolling) ──
     (function setupScrollReveal() {
       document.querySelectorAll('[data-reveal]').forEach(el => {
@@ -2770,6 +2882,25 @@
       if (mq.addEventListener) mq.addEventListener('change', onViewportChange);
       else if (mq.addListener) mq.addListener(onViewportChange);
       window.addEventListener('resize', onViewportChange);
+    })();
+
+    // ── FAQ: one open at a time (name="faq" + click; toggle alone is flaky in some browsers) ──
+    (function setupFaqAccordion() {
+      const list = document.querySelector('.faq-list');
+      if (!list) return;
+      list.addEventListener(
+        'click',
+        e => {
+          const summary = e.target.closest('summary');
+          if (!summary || !list.contains(summary)) return;
+          const detail = summary.parentElement;
+          if (!detail || !detail.matches('details.faq-item')) return;
+          list.querySelectorAll('details.faq-item').forEach(item => {
+            if (item !== detail) item.open = false;
+          });
+        },
+        true
+      );
     })();
 
     // ── Nav: dark text on light sections — geometry-based (elementsFromPoint flickered at section edges) ──
