@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Day of Schedule · Anna &amp; David · September 5, 2026</title>
+  <meta name="description" content="The day-of timeline for Anna &amp; David's wedding at Lincoln Estates on Saturday, September 5, 2026." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600;1,700&display=swap" rel="stylesheet" />
+  <style>
+    @font-face { font-family: "Editor's Note"; src: url('EditorsNote-Hairline-iF664322be4e4fb.otf') format('opentype'); font-weight: 100; font-style: normal; }
+    @font-face { font-family: "Editor's Note"; src: url('EditorsNote-HairlineItalic-iF664322be52ef6.otf') format('opentype'); font-weight: 100; font-style: italic; }
+    @font-face { font-family: "Editor's Note"; src: url('EditorsNote-Thin-iF664322be7fa2e.otf') format('opentype'); font-weight: 200; font-style: normal; }
+    @font-face { font-family: "Editor's Note"; src: url('EditorsNote-ThinItalic-iF664322be84b79.otf') format('opentype'); font-weight: 200; font-style: italic; }
+    @font-face { font-family: "Editor's Note"; src: url('EditorsNote-Extralight-iF664322be43be3.otf') format('opentype'); font-weight: 275; font-style: normal; }
+    @font-face { font-family: "Editor's Note"; src: url('EditorsNote-ExtralightItalic-iF664322be48dd8.otf') format('opentype'); font-weight: 275; font-style: italic; }
+    @font-face { font-family: "Editor's Note"; src: url('EditorsNote-Light-iF664322be5b734.otf') format('opentype'); font-weight: 300; font-style: normal; }
+    @font-face { font-family: "Editor's Note"; src: url('EditorsNote-LightItalic-iF664322be6092b.otf') format('opentype'); font-weight: 300; font-style: italic; }
+    @font-face { font-family: "Editor's Note"; src: url('EditorsNote-Regular-iF664322be6e849.otf') format('opentype'); font-weight: 400; font-style: normal; }
+    @font-face { font-family: "Editor's Note"; src: url('EditorsNote-Italic-iF664322be57316.otf') format('opentype'); font-weight: 400; font-style: italic; }
+    @font-face { font-family: "Editor's Note"; src: url('EditorsNote-Medium-iF664322be6500a.otf') format('opentype'); font-weight: 500; font-style: normal; }
+    @font-face { font-family: "Editor's Note"; src: url('EditorsNote-MediumItalic-iF664322be6a12d.otf') format('opentype'); font-weight: 500; font-style: italic; }
+    @font-face { font-family: "Editor's Note"; src: url('EditorsNote-Semibold-iF664322be731c3.otf') format('opentype'); font-weight: 600; font-style: normal; }
+    @font-face { font-family: "Editor's Note"; src: url('EditorsNote-SemiboldItalic-iF664322be785e3.otf') format('opentype'); font-weight: 600; font-style: italic; }
+    @font-face { font-family: "Editor's Note"; src: url('EditorsNote-Bold-iF664322be38357.otf') format('opentype'); font-weight: 700; font-style: normal; }
+    @font-face { font-family: "Editor's Note"; src: url('EditorsNote-BoldItalic-iF664322be3e863.otf') format('opentype'); font-weight: 700; font-style: italic; }
+  </style>
+  <style>
+    /* ── Design Tokens (shared with index.html, plus earth accents) ── */
+    :root {
+      --cream: #f8f6ec;
+      --forest: #434f40;
+      --sage: #8a9a7b;
+      --clay: #a9764f;
+      --black: #1e1e1e;
+      --white: #ffffff;
+      --light-text: #f1f1f1;
+      --rule: rgba(67, 79, 64, 0.22);
+      --nav-padding-top: 20px;
+      --serif: "Editor's Note", Georgia, serif;
+      --sans: 'Figtree', sans-serif;
+      /* Scallop geometry, shared by the header and the outro — a whole number of
+         bumps spans the width so neither end is cut mid-curve, and the depth
+         tracks bump width to keep them round. Count steps up by breakpoint. */
+      --scallops: 5;
+      --scallop-r: clamp(20px, calc(50vw / var(--scallops)), 40px);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--sans);
+      color: var(--black);
+      background: var(--cream);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ── PAGE HEADER ── */
+    .day-header {
+      position: relative;
+      color: var(--light-text);
+      /* Bottom padding carries the scallop band so copy keeps its spacing above the cusps */
+      padding: 78px 20px calc(52px + var(--scallop-r));
+      text-align: center;
+      overflow: hidden;
+      -webkit-font-smoothing: subpixel-antialiased;
+      -moz-osx-font-smoothing: auto;
+    }
+
+    /* The forest fill lives on its own layer so the scallop mask never touches
+       the text — masking the header itself would flatten its antialiasing.
+       Bottom edge is a row of half-circles, like a patio umbrella's valance. */
+    .day-header::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: var(--forest);
+      -webkit-mask:
+        radial-gradient(50% 100% at 50% 0, #000 98%, #0000 100%)
+          0 100% / calc(100% / var(--scallops)) var(--scallop-r) repeat-x,
+        linear-gradient(#000, #000)
+          0 0 / 100% calc(100% - var(--scallop-r) + 1px) no-repeat;
+      mask:
+        radial-gradient(50% 100% at 50% 0, #000 98%, #0000 100%)
+          0 100% / calc(100% / var(--scallops)) var(--scallop-r) repeat-x,
+        linear-gradient(#000, #000)
+          0 0 / 100% calc(100% - var(--scallop-r) + 1px) no-repeat;
+    }
+
+    /* Only navigation on the page: tap the monogram to go home */
+    .day-logo {
+      position: absolute;
+      top: var(--nav-padding-top);
+      left: 20px;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      height: 40px;
+      text-decoration: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .day-logo img {
+      height: 40px;
+      width: auto;
+      display: block;
+    }
+
+    .day-logo:hover { opacity: 0.72; }
+
+    .day-logo:focus-visible {
+      outline: 2px solid var(--white);
+      outline-offset: 6px;
+      border-radius: 4px;
+    }
+
+    .day-header-inner {
+      position: relative;
+      z-index: 1;
+      max-width: 780px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    /* Date and location, sitting under the title. Narrow screens always stack them
+       as two lines — the row and its separator only kick in when both fit side by side. */
+    .day-eyebrow {
+      display: flex;
+      flex-direction: column;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 7px 10px;
+      font-family: var(--sans);
+      font-weight: 600;
+      font-size: 11px;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: rgba(241, 241, 241, 0.72);
+    }
+
+    .day-eyebrow span { white-space: nowrap; }
+
+    .day-eyebrow-sep { display: none; }
+
+    .day-title {
+      font-family: var(--serif);
+      font-weight: 300;
+      font-style: italic;
+      font-size: clamp(34px, 8.6vw, 82px);
+      line-height: 1.04;
+      letter-spacing: 1px;
+      color: var(--white);
+    }
+
+    /* ── DAY-OF UPDATES NOTE ── */
+    .day-note {
+      display: flex;
+      align-items: flex-start;
+      gap: 11px;
+      width: 100%;
+      max-width: 34rem;
+      margin: 0 auto 26px;
+      padding: 14px 16px;
+      background: rgba(255, 255, 255, 0.55);
+      border: 1px solid var(--rule);
+      border-radius: 4px;
+      text-align: left;
+    }
+
+    .day-note .tl-icon { margin-top: 2px; }
+
+    .day-note p {
+      font-family: var(--sans);
+      font-weight: 300;
+      font-size: 14.5px;
+      line-height: 1.55;
+      color: rgba(30, 30, 30, 0.76);
+    }
+
+    /* ── TIMELINE ──
+       Built mobile first: one column with the spine down the left edge.
+       The alternating two-column layout is added back at 901px and up. */
+    .timeline-section {
+      background: var(--cream);
+      padding: 46px 16px 60px;
+    }
+
+    .timeline {
+      position: relative;
+      width: 100%;
+      max-width: 34rem;
+      margin: 0 auto;
+      /* --gutter: space left of the cards; --spine: line position inside .timeline */
+      --gutter: 28px;
+      --spine: 6px;
+      --node: 11px;
+      padding-left: var(--gutter);
+    }
+
+    /* Spine — fades at both ends so it doesn't collide with section padding */
+    .timeline::before {
+      content: "";
+      position: absolute;
+      top: 4px;
+      bottom: 4px;
+      left: var(--spine);
+      width: 1px;
+      transform: translateX(-50%);
+      background: linear-gradient(
+        180deg,
+        rgba(67, 79, 64, 0) 0%,
+        var(--rule) 4%,
+        var(--rule) 96%,
+        rgba(67, 79, 64, 0) 100%
+      );
+    }
+
+    /* Phase label sits on the spine; cream background masks the line behind it.
+       On mobile it stretches back across the gutter to span the full width. */
+    .tl-phase {
+      position: relative;
+      z-index: 2;
+      margin-left: calc(var(--gutter) * -1);
+      padding: 9px 18px;
+      background: var(--cream);
+      border: 1px solid var(--rule);
+      border-radius: 999px;
+      font-family: var(--sans);
+      font-weight: 600;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--forest);
+      text-align: center;
+    }
+
+    .tl-phase + .tl-item { margin-top: 20px; }
+    .tl-item + .tl-phase { margin-top: 32px; }
+
+    .tl-item { position: relative; }
+
+    .tl-item + .tl-item { margin-top: 12px; }
+
+    .tl-card {
+      padding: 16px 18px;
+      background: rgba(255, 255, 255, 0.55);
+      border: 1px solid var(--rule);
+      border-radius: 4px;
+      transition: transform 0.5s cubic-bezier(0.2, 0.9, 0.2, 1), box-shadow 0.5s ease, border-color 0.4s ease;
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .tl-card:hover {
+        transform: translateY(-3px);
+        border-color: rgba(67, 79, 64, 0.4);
+        box-shadow: 0 14px 32px rgba(67, 79, 64, 0.1);
+      }
+    }
+
+    /* Node + short tick joining the card to the spine */
+    .tl-node {
+      position: absolute;
+      top: 21px;
+      left: calc(var(--spine) - var(--gutter));
+      transform: translateX(-50%);
+      width: var(--node);
+      height: var(--node);
+      border-radius: 50%;
+      background: var(--cream);
+      border: 1px solid var(--forest);
+      box-shadow: inset 0 0 0 2px var(--cream), inset 0 0 0 5px var(--sage);
+    }
+
+    .tl-node::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: calc(100% + 4px);
+      width: 12px;
+      height: 1px;
+      background: var(--rule);
+    }
+
+    /* The icon shares the time's line, so the two read as one label */
+    .tl-time {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--sans);
+      font-weight: 600;
+      font-size: 12px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--clay);
+      margin: 0 0 7px;
+    }
+
+    .tl-icon {
+      flex: none;
+      width: 17px;
+      height: 17px;
+      /* Inherited by the <use> shadow content — the sprite symbols set no paint */
+      fill: none;
+      stroke: var(--sage);
+      stroke-width: 1.75;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* Sprite host: out of flow so it never adds a stray line box */
+    .icon-sprite {
+      position: absolute;
+      width: 0;
+      height: 0;
+      overflow: hidden;
+    }
+
+    .tl-title {
+      font-family: var(--serif);
+      font-weight: 300;
+      font-style: normal;
+      font-size: clamp(23px, 6.2vw, 34px);
+      line-height: 1.16;
+      letter-spacing: 0.5px;
+      color: var(--black);
+      margin: 0;
+    }
+
+    .tl-desc {
+      font-family: var(--sans);
+      font-weight: 300;
+      font-size: 15.5px;
+      line-height: 1.55;
+      color: rgba(30, 30, 30, 0.76);
+      margin: 9px 0 0;
+    }
+
+    /* Inline links in card copy — clay, with the underline warming on hover */
+    .tl-desc a,
+    .day-note a {
+      color: var(--clay);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+      text-decoration-thickness: 1px;
+      text-decoration-color: rgba(169, 118, 79, 0.45);
+      transition: text-decoration-color 0.25s ease;
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .tl-desc a:hover,
+      .day-note a:hover { text-decoration-color: var(--clay); }
+    }
+
+    .tl-desc a:focus-visible,
+    .day-note a:focus-visible {
+      outline: 2px solid var(--clay);
+      outline-offset: 3px;
+      border-radius: 2px;
+    }
+
+    /* Shuttle passenger list — a disclosure so the card stays short until asked */
+    .tl-roster {
+      font-family: var(--sans);
+      margin-top: 13px;
+    }
+
+    .tl-roster > summary {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-weight: 600;
+      font-size: 13px;
+      color: var(--clay);
+      cursor: pointer;
+      list-style: none;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      text-decoration-thickness: 1px;
+      text-decoration-color: rgba(169, 118, 79, 0.45);
+      transition: text-decoration-color 0.25s ease;
+    }
+
+    .tl-roster > summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .tl-roster > summary::after {
+      content: "+";
+      font-weight: 500;
+      font-size: 15px;
+      line-height: 1;
+      text-decoration: none;
+    }
+
+    .tl-roster[open] > summary::after {
+      content: "\2013";
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .tl-roster > summary:hover {
+        text-decoration-color: var(--clay);
+      }
+    }
+
+    .tl-roster > summary:focus-visible {
+      outline: 2px solid var(--clay);
+      outline-offset: 3px;
+      border-radius: 2px;
+    }
+
+    .tl-roster-note {
+      font-size: 12.5px;
+      font-weight: 400;
+      line-height: 1.5;
+      letter-spacing: 0.02em;
+      color: rgba(30, 30, 30, 0.55);
+      margin: 14px 0 0;
+    }
+
+    /* Two columns of names keeps the list from running the length of the page */
+    .tl-roster-list {
+      list-style: none;
+      margin: 8px 0 0;
+      padding: 0;
+      columns: 2;
+      column-gap: 18px;
+      font-size: 14px;
+      font-weight: 300;
+      line-height: 1.7;
+      color: rgba(30, 30, 30, 0.76);
+    }
+
+    .tl-roster-list li {
+      break-inside: avoid;
+    }
+
+    /* Marks the last stop on the line */
+    .tl-item--final .tl-node {
+      background: var(--forest);
+      box-shadow: inset 0 0 0 2px var(--cream), inset 0 0 0 5px var(--forest);
+    }
+
+    /* ── OUTRO ── */
+    .day-outro {
+      position: relative;
+      color: var(--light-text);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      /* Top padding carries the scallop band, mirroring the header */
+      padding: calc(44px + var(--scallop-r)) 20px calc(44px + env(safe-area-inset-bottom, 0px));
+      text-align: center;
+      overflow-x: clip;
+      -webkit-font-smoothing: subpixel-antialiased;
+      -moz-osx-font-smoothing: auto;
+    }
+
+    /* Same valance as the header, flipped: the bumps arc up into the cream */
+    .day-outro::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: var(--forest);
+      -webkit-mask:
+        radial-gradient(50% 100% at 50% 100%, #000 98%, #0000 100%)
+          0 0 / calc(100% / var(--scallops)) var(--scallop-r) repeat-x,
+        linear-gradient(#000, #000)
+          0 100% / 100% calc(100% - var(--scallop-r) + 1px) no-repeat;
+      mask:
+        radial-gradient(50% 100% at 50% 100%, #000 98%, #0000 100%)
+          0 0 / calc(100% / var(--scallops)) var(--scallop-r) repeat-x,
+        linear-gradient(#000, #000)
+          0 100% / 100% calc(100% - var(--scallop-r) + 1px) no-repeat;
+    }
+
+    .day-floral {
+      position: relative;
+      z-index: 1;
+      width: min(857px, 100%);
+      height: auto;
+      display: block;
+    }
+
+    /* ── Reveal ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.7s ease, transform 0.8s cubic-bezier(0.2, 0.9, 0.2, 1);
+    }
+
+    .reveal.in-view {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* ── RESPONSIVE (progressive enhancement above the mobile base) ── */
+
+    /* A little more room to breathe on large phones and small tablets */
+    @media (min-width: 480px) {
+      .timeline-section { padding: 56px 24px 72px; }
+      .timeline { --gutter: 40px; --spine: 8px; }
+      .tl-card { padding: 20px 24px; }
+      .tl-node::after { width: 20px; }
+      :root { --scallops: 7; }
+      .day-header { padding: 88px 32px calc(60px + var(--scallop-r)); }
+      .day-logo { left: 24px; }
+    }
+
+    /* Wide enough for the date and location to share one line */
+    @media (min-width: 640px) {
+      .day-eyebrow { flex-direction: row; }
+      .day-eyebrow-sep { display: block; }
+      :root { --scallops: 9; }
+    }
+
+    /* Two columns: spine moves to the middle and cards alternate around it */
+    @media (min-width: 901px) {
+      .timeline-section {
+        padding: clamp(64px, 10vh, 120px) clamp(20px, 5vw, 80px) clamp(72px, 12vh, 140px);
+      }
+
+      .timeline {
+        max-width: 1040px;
+        padding-left: 0;
+        --spine: 50%;
+        --node: 13px;
+      }
+
+      .timeline::before { top: 6px; bottom: 6px; }
+
+      .tl-phase {
+        width: fit-content;
+        margin: 0 auto;
+        padding: 9px 26px;
+        font-size: 12px;
+        letter-spacing: 0.26em;
+      }
+
+      .tl-phase + .tl-item { margin-top: 32px; }
+      .tl-item + .tl-phase { margin-top: 44px; }
+      .tl-item + .tl-item { margin-top: 20px; }
+
+      .tl-item {
+        display: grid;
+        grid-template-columns: 1fr 78px 1fr;
+        align-items: start;
+      }
+
+      .tl-card {
+        grid-column: 1;
+        grid-row: 1;
+        text-align: right;
+        padding: 22px 28px;
+      }
+
+      /* Every other item swaps to the right of the spine. Counting by type
+         skips the phase pills (<p>), so the alternation runs continuously. */
+      .tl-item:nth-of-type(even) .tl-card {
+        grid-column: 3;
+        text-align: left;
+      }
+
+      .tl-node {
+        grid-column: 2;
+        grid-row: 1;
+        position: relative;
+        top: auto;
+        left: auto;
+        transform: none;
+        align-self: start;
+        justify-self: center;
+        margin-top: 28px;
+        box-shadow: inset 0 0 0 2.5px var(--cream), inset 0 0 0 6px var(--sage);
+      }
+
+      .tl-node::after {
+        right: calc(100% + 5px);
+        left: auto;
+        width: 26px;
+      }
+
+      .tl-item:nth-of-type(even) .tl-node::after {
+        right: auto;
+        left: calc(100% + 5px);
+      }
+
+      .tl-item--final .tl-node {
+        box-shadow: inset 0 0 0 2.5px var(--cream), inset 0 0 0 6px var(--forest);
+      }
+
+      /* Cards left of the spine read right to left, so the icon mirrors with them */
+      .tl-time { font-size: 13px; margin-bottom: 10px; flex-direction: row-reverse; gap: 10px; }
+      .tl-item:nth-of-type(even) .tl-time { flex-direction: row; }
+      .tl-icon { width: 19px; height: 19px; }
+      .tl-desc { font-size: 17px; line-height: 1.6; margin-top: 12px; }
+      .tl-roster { margin-top: 16px; }
+      .tl-roster > summary { font-size: 14px; }
+      .tl-roster-note { font-size: 13px; margin-top: 16px; }
+      .tl-roster-list { font-size: 14.5px; }
+
+      .day-note {
+        max-width: 640px;
+        gap: 13px;
+        margin-bottom: 44px;
+        padding: 17px 22px;
+      }
+
+      .day-note p { font-size: 15.5px; }
+
+      :root { --scallops: 16; }
+
+      .day-header {
+        padding: clamp(104px, 13vh, 150px) clamp(24px, 6vw, 100px)
+                 calc(clamp(72px, 11vh, 120px) + var(--scallop-r));
+      }
+
+      .day-header-inner { gap: 26px; }
+      .day-eyebrow { font-size: 13px; letter-spacing: 0.28em; }
+      .day-title { letter-spacing: 1.5px; }
+
+      .day-logo { left: 28px; }
+      .day-logo,
+      .day-logo img { height: 52px; }
+
+      .day-outro {
+        padding: calc(clamp(56px, 8vh, 92px) + var(--scallop-r))
+                 clamp(24px, 6vw, 100px) clamp(56px, 8vh, 92px);
+      }
+    }
+
+    @media (min-width: 1101px) {
+      .day-logo { left: 40px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after {
+        animation-duration: 0.001ms !important;
+        transition-duration: 0.001ms !important;
+      }
+      .reveal { opacity: 1; transform: none; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Lucide icon sprite (ISC). Paint and stroke live on .tl-icon in CSS — those
+       properties inherit into each <use>, which attributes here would not. -->
+  <svg class="icon-sprite" aria-hidden="true" focusable="false" width="0" height="0">
+    <defs>
+      <symbol id="i-bus" viewBox="0 0 24 24"><path d="M8 6v6"/> <path d="M15 6v6"/> <path d="M2 12h19.6"/> <path d="M18 18h3s.5-1.7.8-2.8c.1-.4.2-.8.2-1.2 0-.4-.1-.8-.2-1.2l-1.4-5C20.1 6.8 19.1 6 18 6H4a2 2 0 0 0-2 2v10h3"/> <circle cx="7" cy="18" r="2"/> <path d="M9 18h5"/> <circle cx="16" cy="18" r="2"/></symbol>
+      <symbol id="i-door-open" viewBox="0 0 24 24"><path d="M11 20H2"/> <path d="M11 4.562v16.157a1 1 0 0 0 1.242.97L19 20V5.562a2 2 0 0 0-1.515-1.94l-4-1A2 2 0 0 0 11 4.561z"/> <path d="M11 4H8a2 2 0 0 0-2 2v14"/> <path d="M14 12h.01"/> <path d="M22 20h-3"/></symbol>
+      <symbol id="i-heart" viewBox="0 0 24 24"><path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5"/></symbol>
+      <symbol id="i-camera" viewBox="0 0 24 24"><path d="M13.997 4a2 2 0 0 1 1.76 1.05l.486.9A2 2 0 0 0 18.003 7H20a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h1.997a2 2 0 0 0 1.759-1.048l.489-.904A2 2 0 0 1 10.004 4z"/> <circle cx="12" cy="13" r="3"/></symbol>
+      <symbol id="i-martini" viewBox="0 0 24 24"><path d="M12 12 4.207 4.207A.707.707 0 0 1 4.707 3h14.586a.707.707 0 0 1 .5 1.207z"/> <path d="M12 12v10"/> <path d="M7 22h10"/></symbol>
+      <symbol id="i-gem" viewBox="0 0 24 24"><path d="M10.5 3 8 9l4 13 4-13-2.5-6"/> <path d="M17 3a2 2 0 0 1 1.6.8l3 4a2 2 0 0 1 .013 2.382l-7.99 10.986a2 2 0 0 1-3.247 0l-7.99-10.986A2 2 0 0 1 2.4 7.8l2.998-3.997A2 2 0 0 1 7 3z"/> <path d="M2 9h20"/></symbol>
+      <symbol id="i-tent" viewBox="0 0 24 24"><path d="M3.5 21 14 3"/> <path d="M20.5 21 10 3"/> <path d="M15.5 21 12 15l-3.5 6"/> <path d="M2 21h20"/></symbol>
+      <symbol id="i-music" viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/> <circle cx="6" cy="18" r="3"/> <circle cx="18" cy="16" r="3"/></symbol>
+      <symbol id="i-cake" viewBox="0 0 24 24"><path d="M20 21v-8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8"/> <path d="M4 16s.5-1 2-1 2.5 2 4 2 2.5-2 4-2 2.5 2 4 2 2-1 2-1"/> <path d="M2 21h20"/> <path d="M7 8v3"/> <path d="M12 8v3"/> <path d="M17 8v3"/> <path d="M7 4h.01"/> <path d="M12 4h.01"/> <path d="M17 4h.01"/></symbol>
+      <symbol id="i-soup" viewBox="0 0 24 24"><path d="M12 21a9 9 0 0 0 9-9H3a9 9 0 0 0 9 9Z"/> <path d="M7 21h10"/> <path d="M19.5 12 22 6"/> <path d="M16.25 3c.27.1.8.53.75 1.36-.06.83-.93 1.2-1 2.02-.05.78.34 1.24.73 1.62"/> <path d="M11.25 3c.27.1.8.53.74 1.36-.05.83-.93 1.2-.98 2.02-.06.78.33 1.24.72 1.62"/> <path d="M6.25 3c.27.1.8.53.75 1.36-.06.83-.93 1.2-1 2.02-.05.78.34 1.24.74 1.62"/></symbol>
+      <symbol id="i-mic" viewBox="0 0 24 24"><path d="M12 19v3"/> <path d="M19 10v2a7 7 0 0 1-14 0v-2"/> <rect x="9" y="2" width="6" height="13" rx="3"/></symbol>
+      <symbol id="i-utensils" viewBox="0 0 24 24"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/> <path d="M7 2v20"/> <path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></symbol>
+      <symbol id="i-dices" viewBox="0 0 24 24"><rect width="12" height="12" x="2" y="10" rx="2" ry="2"/> <path d="m17.92 14 3.5-3.5a2.24 2.24 0 0 0 0-3l-5-4.92a2.24 2.24 0 0 0-3 0L10 6"/> <path d="M6 18h.01"/> <path d="M10 14h.01"/> <path d="M15 6h.01"/> <path d="M18 9h.01"/></symbol>
+      <symbol id="i-guitar" viewBox="0 0 24 24"><path d="m11.9 12.1 4.514-4.514"/> <path d="M20.1 2.3a1 1 0 0 0-1.4 0l-1.114 1.114A2 2 0 0 0 17 4.828v1.344a2 2 0 0 1-.586 1.414A2 2 0 0 1 17.828 7h1.344a2 2 0 0 0 1.414-.586L21.7 5.3a1 1 0 0 0 0-1.4z"/> <path d="m6 16 2 2"/> <path d="M8.23 9.85A3 3 0 0 1 11 8a5 5 0 0 1 5 5 3 3 0 0 1-1.85 2.77l-.92.38A2 2 0 0 0 12 18a4 4 0 0 1-4 4 6 6 0 0 1-6-6 4 4 0 0 1 4-4 2 2 0 0 0 1.85-1.23z"/></symbol>
+      <symbol id="i-utensils-crossed" viewBox="0 0 24 24"><path d="m16 2-2.3 2.3a3 3 0 0 0 0 4.2l1.8 1.8a3 3 0 0 0 4.2 0L22 8"/> <path d="M15 15 3.3 3.3a4.2 4.2 0 0 0 0 6l7.3 7.3c.7.7 2 .7 2.8 0L15 15Zm0 0 7 7"/> <path d="m2.1 21.8 6.4-6.3"/> <path d="m19 5-7 7"/></symbol>
+      <symbol id="i-images" viewBox="0 0 24 24"><path d="m22 11-1.296-1.296a2.4 2.4 0 0 0-3.408 0L11 16"/> <path d="M4 8a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2"/> <circle cx="13" cy="7" r="1" fill="currentColor"/> <rect x="8" y="2" width="14" height="14" rx="2"/></symbol>
+      <symbol id="i-ice-cream-cone" viewBox="0 0 24 24"><path d="m7 11 4.08 10.35a1 1 0 0 0 1.84 0L17 11"/> <path d="M17 7A5 5 0 0 0 7 7"/> <path d="M17 7a2 2 0 0 1 0 4H7a2 2 0 0 1 0-4"/></symbol>
+      <symbol id="i-sparkles" viewBox="0 0 24 24"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"/> <path d="M20 2v4"/> <path d="M22 4h-4"/> <circle cx="4" cy="20" r="2"/></symbol>
+      <symbol id="i-disc-3" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/> <path d="M6 12c0-1.7.7-3.2 1.8-4.2"/> <circle cx="12" cy="12" r="2"/> <path d="M18 12c0 1.7-.7 3.2-1.8 4.2"/></symbol>
+      <symbol id="i-pizza" viewBox="0 0 24 24"><path d="m12 14-1 1"/> <path d="m13.75 18.25-1.25 1.42"/> <path d="M17.775 5.654a15.68 15.68 0 0 0-12.121 12.12"/> <path d="M18.8 9.3a1 1 0 0 0 2.1 7.7"/> <path d="M21.964 20.732a1 1 0 0 1-1.232 1.232l-18-5a1 1 0 0 1-.695-1.232A19.68 19.68 0 0 1 15.732 2.037a1 1 0 0 1 1.232.695z"/></symbol>
+      <symbol id="i-flower-2" viewBox="0 0 24 24"><path d="M12 5a3 3 0 1 1 3 3m-3-3a3 3 0 1 0-3 3m3-3v1M9 8a3 3 0 1 0 3 3M9 8h1m5 0a3 3 0 1 1-3 3m3-3h-1m-2 3v-1"/> <circle cx="12" cy="8" r="2"/> <path d="M12 10v12"/> <path d="M12 22c4.2 0 7-1.667 7-5-4.2 0-7 1.667-7 5Z"/> <path d="M12 22c-4.2 0-7-1.667-7-5 4.2 0 7 1.667 7 5Z"/></symbol>
+      <symbol id="i-moon-star" viewBox="0 0 24 24"><path d="M18 5h4"/> <path d="M20 3v4"/> <path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"/></symbol>
+      <symbol id="i-bell-ring" viewBox="0 0 24 24"><path d="M10.268 21a2 2 0 0 0 3.464 0"/> <path d="M22 8c0-2.3-.8-4.3-2-6"/> <path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"/> <path d="M4 2C2.8 3.7 2 5.7 2 8"/></symbol>
+    </defs>
+  </svg>
+
+
+  <!-- HEADER — logo is the only nav; it goes back to the homepage -->
+  <header class="day-header">
+    <a href="index.html" class="day-logo" aria-label="Anna and David — back to home">
+      <img src="Logo.svg" alt="" width="55" height="52" decoding="async" />
+    </a>
+    <div class="day-header-inner">
+      <h1 class="day-title">Day of Schedule</h1>
+      <p class="day-eyebrow">
+        <span>Saturday September 5, 2026</span>
+        <span class="day-eyebrow-sep" aria-hidden="true">·</span>
+        <span>Lincoln Estates</span>
+      </p>
+    </div>
+  </header>
+
+  <!-- TIMELINE -->
+  <section class="timeline-section" id="timeline" aria-label="Day of schedule">
+    <!-- Day-of updates — the one thing we want read before the timeline -->
+    <aside class="day-note">
+      <svg class="tl-icon" aria-hidden="true" focusable="false"><use href="#i-bell-ring"/></svg>
+      <p>Times may shift a little on the day. If you haven't already,
+        <a href="https://partiful.com/e/AnZkpPEWOdVUU1dbWkue?c=2BgWt-UI" target="_blank" rel="noopener noreferrer">join us on Partiful</a>
+        &mdash; that's where we'll post day-of updates.</p>
+    </aside>
+
+    <div class="timeline">
+
+      <p class="tl-phase reveal">Getting There</p>
+
+      <article class="tl-item reveal">
+        <div class="tl-card">
+          <p class="tl-time"><svg class="tl-icon" aria-hidden="true" focusable="false"><use href="#i-bus"/></svg>2:20 pm</p>
+          <h2 class="tl-title">Shuttle to the venue</h2>
+          <p class="tl-desc">Pickup is at the <a href="https://maps.app.goo.gl/ZMLDJdfTkQDNfxeH9" target="_blank" rel="noopener noreferrer">Finch East Commuter Lot</a>. We won't be on the bus, and it leaves on time — please arrive a few minutes early.</p>
+          <details class="tl-roster">
+            <summary>View all 54 passengers</summary>
+            <p class="tl-roster-note">50 boarding at Finch East Commuter Lot</p>
+            <ul class="tl-roster-list">
+              <li>Alex Petrovich</li>
+              <li>Anna Huang</li>
+              <li>Ashley Fong</li>
+              <li>Bill Chen</li>
+              <li>Bindi Mehta</li>
+              <li>Chris Chua</li>
+              <li>Chris Fang</li>
+              <li>Darrin Lee</li>
+              <li>David Cho</li>
+              <li>Dennis Young</li>
+              <li>Elman Chao</li>
+              <li>Emily Lu</li>
+              <li>Eric Sun</li>
+              <li>Eva Ho</li>
+              <li>Irene Tran</li>
+              <li>Jackie Liang</li>
+              <li>Jacob Ly</li>
+              <li>Jennie Cheung</li>
+              <li>Jenny Wang</li>
+              <li>Jeremy Lan</li>
+              <li>Jon Trieu</li>
+              <li>Jordan Lau</li>
+              <li>Julie Liang</li>
+              <li>Justin Chan</li>
+              <li>Justin Law</li>
+              <li>Karen Chan Lim</li>
+              <li>Kate Sergeeva</li>
+              <li>Katie Chung</li>
+              <li>Kelvin Lau</li>
+              <li>Kevin Ding</li>
+              <li>Kevin Li</li>
+              <li>Kevin Lin</li>
+              <li>Linda Luu</li>
+              <li>Linda Zhang</li>
+              <li>Matt Sem</li>
+              <li>Max Xia</li>
+              <li>Morgan Williams</li>
+              <li>Nina Pan</li>
+              <li>Rachel Poon</li>
+              <li>Raemar Sopoco</li>
+              <li>Remira Melendrez</li>
+              <li>Robert Lin</li>
+              <li>Sharon Tee</li>
+              <li>Stephanie Wong</li>
+              <li>Steven Lu</li>
+              <li>Teddy Yang</li>
+              <li>Terri Yip</li>
+              <li>Tina Gong</li>
+              <li>Vikki Wan</li>
+              <li>Vincent McLoughlin</li>
+            </ul>
+            <p class="tl-roster-note">4 catching the bus home only</p>
+            <ul class="tl-roster-list">
+              <li>Anish Sarkar</li>
+              <li>Bernita Ng</li>
+              <li>Gini Luong</li>
+              <li>Kristin So</li>
+            </ul>
+          </details>
+        </div>
+        <span class="tl-node" aria-hidden="true"></span>
+      </article>
+
+      <p class="tl-phase reveal">Ceremony</p>
+
+      <article class="tl-item reveal">
+        <div class="tl-card">
+          <p class="tl-time"><svg class="tl-icon" aria-hidden="true" focusable="false"><use href="#i-door-open"/></svg>4:30 pm</p>
+          <h2 class="tl-title">Guests arrive</h2>
+          <p class="tl-desc">Welcome to Lincoln Estates. Take a Polaroid at the welcome table, stick it in the guest book with a note, and find your seat.</p>
+        </div>
+        <span class="tl-node" aria-hidden="true"></span>
+      </article>
+
+      <article class="tl-item reveal">
+        <div class="tl-card">
+          <p class="tl-time"><svg class="tl-icon" aria-hidden="true" focusable="false"><use href="#i-heart"/></svg>5:00 pm</p>
+          <h2 class="tl-title">Ceremony</h2>
+          <p class="tl-desc">Vows in the vineyard. Phones away, please &mdash; we'd love everyone fully present for this part.</p>
+        </div>
+        <span class="tl-node" aria-hidden="true"></span>
+      </article>
+
+      <article class="tl-item reveal">
+        <div class="tl-card">
+          <p class="tl-time"><svg class="tl-icon" aria-hidden="true" focusable="false"><use href="#i-camera"/></svg>5:30 pm</p>
+          <h2 class="tl-title">Group photos</h2>
+          <p class="tl-desc">Stay close after the ceremony &mdash; we'll gather everyone, then work through family and friend groups.</p>
+        </div>
+        <span class="tl-node" aria-hidden="true"></span>
+      </article>
+
+      <p class="tl-phase reveal">Cocktail Hour</p>
+
+      <article class="tl-item reveal">
+        <div class="tl-card">
+          <p class="tl-time"><svg class="tl-icon" aria-hidden="true" focusable="false"><use href="#i-martini"/></svg>6:00 pm</p>
+          <h2 class="tl-title">Cocktail hour</h2>
+          <p class="tl-desc">Drinks and small bites. Find the seating chart on your way in.</p>
+        </div>
+        <span class="tl-node" aria-hidden="true"></span>
+      </article>
+
+      <article class="tl-item reveal">
+        <div class="tl-card">
+          <p class="tl-time"><svg class="tl-icon" aria-hidden="true" focusable="false"><use href="#i-gem"/></svg>6:00 &ndash; 7:00 pm</p>
+          <h2 class="tl-title">DIY charm bar</h2>
+          <p class="tl-desc">Make yourself a beaded keychain to take home. Fully self-serve &mdash; pick your charms and go.</p>
+        </div>
+        <span class="tl-node" aria-hidden="true"></span>
+      </article>
+
+      <p class="tl-phase reveal">Reception</p>
+
+      <article class="tl-item reveal">
+        <div class="tl-card">
+          <p class="tl-time"><svg class="tl-icon" aria-hidden="true" focusable="false"><use href="#i-tent"/></svg>7:00 pm</p>
+          <h2 class="tl-title">Reception begins</h2>
+          <p class="tl-desc">Head into the tent and find your table. Dinner is served.</p>
+        </div>
+        <span class="tl-node" aria-hidden="true"></span>
+      </article>
+
+      <article class="tl-item reveal">
+        <div class="tl-card">
+          <p class="tl-time"><svg class="tl-icon" aria-hidden="true" focusable="false"><use href="#i-music"/></svg>7:15 pm</p>
+          <h2 class="tl-title">First dance</h2>
+        </div>
+        <span class="tl-node" aria-hidden="true"></span>
+      </article>
+
+      <article class="tl-item reveal">
+        <div class="tl-card">
+          <p class="tl-time"><svg class="tl-icon" aria-hidden="true" focusable="false"><use href="#i-cake"/></svg>7:20 pm</p>
+          <h2 class="tl-title">Cake cutting</h2>
+        </div>
+        <span class="tl-node" aria-hidden="true"></span>
+      </article>
+
+      <article class="tl-item reveal">
+        <div class="tl-card">
+          <p class="tl-time"><svg class="tl-icon" aria-hidden="true" focusable="false"><use href="#i-soup"/></svg>7:30 pm</p>
+          <h2 class="tl-title">First course</h2>
+        </div>
+        <span class="tl-node" aria-hidden="true"></span>
+      </article>
+
+      <article class="tl-item reveal">
+        <div class="tl-card">
+          <p class="tl-time"><svg class="tl-icon" aria-hidden="true" focusable="false"><use href="#i-mic"/></svg>7:45 pm</p>
+          <h2 class="tl-title">Parent speeches</h2>
+        </div>
+        <span class="tl-node" aria-hidden="true"></span>
+      </article>
+
+      <article class="tl-item reveal">
+        <div class="tl-card">
+          <p class="tl-time"><svg class="tl-icon" aria-hidden="true" focusable="false"><use href="#i-utensils"/></svg>8:00 pm</p>
+          <h2 class="tl-title">Second course</h2>
+        </div>
+        <span class="tl-node" aria-hidden="true"></span>
+      </article>
+
+      <article class="tl-item reveal">
+        <div class="tl-card">
+          <p class="tl-time"><svg class="tl-icon" aria-hidden="true" focusable="false"><use href="#i-dices"/></svg>8:00 pm</p>
+          <h2 class="tl-title">First game</h2>
+          <p class="tl-desc">Questions about the couple &mdash; everyone plays.</p>
+        </div>
+        <span class="tl-node" aria-hidden="true"></span>
+      </article>
+
+      <article class="tl-item reveal">
+        <div class="tl-card">
+          <p class="tl-time"><svg class="tl-icon" aria-hidden="true" focusable="false"><use href="#i-mic"/></svg>8:15 pm</p>
+          <h2 class="tl-title">Speeches</h2>
+          <p class="tl-desc">Toasts from the bridesmaids and groomsmen.</p>
+        </div>
+        <span class="tl-node" aria-hidden="true"></span>
+      </article>
+
+      <article class="tl-item reveal">
+        <div class="tl-card">
+          <p class="tl-time"><svg class="tl-icon" aria-hidden="true" focusable="false"><use href="#i-guitar"/></svg>8:25 pm</p>
+          <h2 class="tl-title">Live performance</h2>
+          <p class="tl-desc">A live set from Vanessa &amp; Dickson, with table toasting to follow.</p>
+        </div>
+        <span class="tl-node" aria-hidden="true"></span>
+      </article>
+
+      <article class="tl-item reveal">
+        <div class="tl-card">
+          <p class="tl-time"><svg class="tl-icon" aria-hidden="true" focusable="false"><use href="#i-utensils-crossed"/></svg>8:30 pm</p>
+          <h2 class="tl-title">Third course</h2>
+        </div>
+        <span class="tl-node" aria-hidden="true"></span>
+      </article>
+
+      <article class="tl-item reveal">
+        <div class="tl-card">
+          <p class="tl-time"><svg class="tl-icon" aria-hidden="true" focusable="false"><use href="#i-mic"/></svg>8:30 pm</p>
+          <h2 class="tl-title">Speeches</h2>
+          <p class="tl-desc">The second round of toasts from the bridesmaids and groomsmen, while the main course is served.</p>
+        </div>
+        <span class="tl-node" aria-hidden="true"></span>
+      </article>
+
+      <article class="tl-item reveal">
+        <div class="tl-card">
+          <p class="tl-time"><svg class="tl-icon" aria-hidden="true" focusable="false"><use href="#i-dices"/></svg>8:40 pm</p>
+          <h2 class="tl-title">Second game</h2>
+          <p class="tl-desc">Guess the bride's hand.</p>
+        </div>
+        <span class="tl-node" aria-hidden="true"></span>
+      </article>
+
+      <article class="tl-item reveal">
+        <div class="tl-card">
+          <p class="tl-time"><svg class="tl-icon" aria-hidden="true" focusable="false"><use href="#i-images"/></svg>8:45 &ndash; 11:45 pm</p>
+          <h2 class="tl-title">Photobooth opens</h2>
+          <p class="tl-desc">Open all night until 11:45. Grab your friends and take a strip home.</p>
+        </div>
+        <span class="tl-node" aria-hidden="true"></span>
+      </article>
+
+      <article class="tl-item reveal">
+        <div class="tl-card">
+          <p class="tl-time"><svg class="tl-icon" aria-hidden="true" focusable="false"><use href="#i-ice-cream-cone"/></svg>9:00 pm</p>
+          <h2 class="tl-title">Dessert</h2>
+        </div>
+        <span class="tl-node" aria-hidden="true"></span>
+      </article>
+
+      <p class="tl-phase reveal">Late Night</p>
+
+      <article class="tl-item reveal">
+        <div class="tl-card">
+          <p class="tl-time"><svg class="tl-icon" aria-hidden="true" focusable="false"><use href="#i-sparkles"/></svg>9:15 pm</p>
+          <h2 class="tl-title">Fairylight photo outside</h2>
+          <p class="tl-desc">A photo outside with fairylights — completely optional, so come join if you're interested. Grab a strand on your way out.</p>
+        </div>
+        <span class="tl-node" aria-hidden="true"></span>
+      </article>
+
+      <article class="tl-item reveal">
+        <div class="tl-card">
+          <p class="tl-time"><svg class="tl-icon" aria-hidden="true" focusable="false"><use href="#i-disc-3"/></svg>10:00 pm</p>
+          <h2 class="tl-title">Dance floor opens</h2>
+          <p class="tl-desc">Grab a glow stick and light up the dance floor.</p>
+        </div>
+        <span class="tl-node" aria-hidden="true"></span>
+      </article>
+
+      <article class="tl-item reveal">
+        <div class="tl-card">
+          <p class="tl-time"><svg class="tl-icon" aria-hidden="true" focusable="false"><use href="#i-pizza"/></svg>10:30 pm</p>
+          <h2 class="tl-title">Late night food</h2>
+        </div>
+        <span class="tl-node" aria-hidden="true"></span>
+      </article>
+
+      <article class="tl-item reveal">
+        <div class="tl-card">
+          <p class="tl-time"><svg class="tl-icon" aria-hidden="true" focusable="false"><use href="#i-flower-2"/></svg>11:00 pm &ndash; 12:00 am</p>
+          <h2 class="tl-title">Take home flowers</h2>
+          <p class="tl-desc">Please do &mdash; the arrangements are yours to take. Better in your kitchen than in a bin.</p>
+        </div>
+        <span class="tl-node" aria-hidden="true"></span>
+      </article>
+
+      <article class="tl-item reveal">
+        <div class="tl-card">
+          <p class="tl-time"><svg class="tl-icon" aria-hidden="true" focusable="false"><use href="#i-images"/></svg>11:45 pm</p>
+          <h2 class="tl-title">Photobooth closes</h2>
+          <p class="tl-desc">Last chance for a strip.</p>
+        </div>
+        <span class="tl-node" aria-hidden="true"></span>
+      </article>
+
+      <article class="tl-item reveal">
+        <div class="tl-card">
+          <p class="tl-time"><svg class="tl-icon" aria-hidden="true" focusable="false"><use href="#i-music"/></svg>12:00 am</p>
+          <h2 class="tl-title">Last dance</h2>
+          <p class="tl-desc">The dance floor closes, and we'll be saying goodbye and thank you.</p>
+        </div>
+        <span class="tl-node" aria-hidden="true"></span>
+      </article>
+
+      <article class="tl-item reveal">
+        <div class="tl-card">
+          <p class="tl-time"><svg class="tl-icon" aria-hidden="true" focusable="false"><use href="#i-bus"/></svg>12:15 am</p>
+          <h2 class="tl-title">Shuttle leaves</h2>
+          <p class="tl-desc">The bus heads back to Toronto. If you're on it, don't miss it.</p>
+        </div>
+        <span class="tl-node" aria-hidden="true"></span>
+      </article>
+
+      <article class="tl-item tl-item--final reveal">
+        <div class="tl-card">
+          <p class="tl-time"><svg class="tl-icon" aria-hidden="true" focusable="false"><use href="#i-moon-star"/></svg>12:30 am</p>
+          <h2 class="tl-title">Goodnight</h2>
+          <p class="tl-desc">The venue closes. Drive safe, or hand the keys to someone who didn't enjoy the wine quite as much.</p>
+        </div>
+        <span class="tl-node" aria-hidden="true"></span>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- OUTRO — floral band, no copy -->
+  <section class="day-outro">
+    <img
+      class="day-floral"
+      src="Flora.png?v=1715"
+      alt=""
+      width="1715"
+      height="806"
+      loading="lazy"
+      decoding="async"
+    />
+  </section>
+
+  <script>
+    // ── Reveal timeline items as they enter the viewport ──
+    (function setupReveal() {
+      const items = document.querySelectorAll('.reveal');
+      if (!items.length) return;
+
+      const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (reduceMotion || !('IntersectionObserver' in window)) {
+        items.forEach(el => el.classList.add('in-view'));
+        return;
+      }
+
+      const io = new IntersectionObserver(
+        entries => {
+          entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add('in-view');
+            io.unobserve(entry.target);
+          });
+        },
+        { rootMargin: '0px 0px -8% 0px', threshold: 0.08 }
+      );
+
+      items.forEach(el => io.observe(el));
+    })();
+  </script>
+</body>
+</html>

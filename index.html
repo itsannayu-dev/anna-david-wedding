@@ -44,7 +44,17 @@
       --serif: "Editor's Note", Georgia, serif;
       --sans: 'Figtree', sans-serif;
       --hand: 'Caveat', cursive;
+      /* Scalloped section edges. A whole number of bumps spans the width so
+         neither end is cut mid-curve, and the depth tracks bump width to keep
+         them round. These min-width steps mirror schedule.html so the scallops
+         are identical on both pages. */
+      --scallops: 5;
+      --scallop-r: clamp(20px, calc(50vw / var(--scallops)), 40px);
     }
+
+    @media (min-width: 480px) { :root { --scallops: 7; } }
+    @media (min-width: 640px) { :root { --scallops: 9; } }
+    @media (min-width: 901px) { :root { --scallops: 16; } }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -504,6 +514,46 @@
     .hero-tagline em {
       font-style: italic;
       font-weight: 200; /* Thin Italic */
+    }
+
+    /* Hero CTA → schedule.html. Parent .hero-heading is pointer-events: none, so re-enable here. */
+    .hero-cta {
+      pointer-events: auto;
+      margin-top: 28px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--serif);
+      font-weight: 300;
+      font-size: 20px;
+      letter-spacing: 1.4px;
+      color: var(--white);
+      text-decoration: none;
+      border: 1px solid rgba(255, 255, 255, 0.55);
+      border-radius: 999px;
+      padding: 13px 30px;
+      background: rgba(0, 0, 0, 0.22);
+      backdrop-filter: blur(6px);
+      transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease, transform 0.15s ease;
+    }
+
+    .hero-cta:hover {
+      background: var(--white);
+      border-color: var(--white);
+      color: var(--black);
+    }
+
+    .hero-cta:active { transform: scale(0.98); }
+
+    .hero-cta:focus-visible {
+      outline: 2px solid var(--white);
+      outline-offset: 4px;
+    }
+
+    .hero-cta-arrow {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
     }
 
     /* ── Hero carousel: horizontal strip, autoscroll only (no manual pan/scroll) ── */
@@ -1016,16 +1066,43 @@
 
     /* ── SCHEDULE ── */
     .schedule {
-      background: var(--forest);
-      background-color: var(--forest);
+      position: relative;
+      /* Cream shows through the scallop notches, matching the sections either side */
+      background: var(--cream);
       display: flex;
       flex-direction: column;
       gap: 80px;
       align-items: center;
-      padding: 110px 100px;
+      /* Top padding carries the scallop band */
+      padding: calc(110px + var(--scallop-r)) 100px 110px;
       -webkit-font-smoothing: subpixel-antialiased;
       -moz-osx-font-smoothing: auto;
       text-rendering: optimizeLegibility;
+    }
+
+    /* The forest fill sits on its own layer so its top edge can be scalloped.
+       Masking .schedule itself would flatten its text antialiasing. */
+    .schedule::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: var(--forest);
+      -webkit-mask:
+        radial-gradient(50% 100% at 50% 100%, #000 98%, #0000 100%)
+          0 0 / calc(100% / var(--scallops)) var(--scallop-r) repeat-x,
+        linear-gradient(#000, #000)
+          0 100% / 100% calc(100% - var(--scallop-r) + 1px) no-repeat;
+      mask:
+        radial-gradient(50% 100% at 50% 100%, #000 98%, #0000 100%)
+          0 0 / calc(100% / var(--scallops)) var(--scallop-r) repeat-x,
+        linear-gradient(#000, #000)
+          0 100% / 100% calc(100% - var(--scallop-r) + 1px) no-repeat;
+    }
+
+    /* Lift the content above the masked fill layer */
+    .schedule > * {
+      position: relative;
+      z-index: 1;
     }
 
     .schedule-header {
@@ -1703,7 +1780,7 @@
         margin-left: calc(50% - 50vw);
         margin-right: calc(50% - 50vw);
       }
-      .schedule { padding: 80px 40px; }
+      .schedule { padding: calc(80px + var(--scallop-r)) 40px 80px; }
       .schedule-items {
         flex-direction: column;
         align-items: center;
@@ -1716,6 +1793,13 @@
       .countdown-section { padding: 80px 40px 0; }
       .countdown-unit { width: 160px; }
       .nav-links { gap: 24px; }
+      /* "Day of Schedule" is wider than "RSVP" — tighten the pill so the bar still fits */
+      .nav-rsvp {
+        font-size: 17px;
+        letter-spacing: 0.8px;
+        padding: 9px 20px;
+        white-space: nowrap;
+      }
     }
 
     @media (max-width: 640px) {
@@ -1750,6 +1834,7 @@
       .hero-heading .hero-title,
       .hero-title { font-size: 48px; white-space: normal; text-align: center; width: 100%; }
       .hero-tagline { font-size: clamp(22px, 5.2vw, 40px); }
+      .hero-cta { margin-top: 22px; font-size: 18px; padding: 12px 24px; letter-spacing: 1px; }
       .hero-more { bottom: 34px; font-size: 18px; padding: 12px 22px; }
       .hero-collage-wrap { padding: 18px 18px; }
       .hero-collage { grid-template-columns: 1fr; height: auto; }
@@ -1821,7 +1906,7 @@
       <li><a href="#travel">Travel &amp; Stay</a></li>
       <li><a href="#faq">Q&amp;A</a></li>
     </ul>
-    <a href="https://withjoy.com/david-anna-sep5/rsvp" class="nav-rsvp nav-rsvp--desktop" target="_blank" rel="noopener noreferrer">RSVP</a>
+    <a href="schedule.html" class="nav-rsvp nav-rsvp--desktop">Day of Schedule</a>
     <div
       class="nav-mobile-panel"
       id="navMobilePanel"
@@ -1852,7 +1937,7 @@
           <li><a href="#travel">Travel &amp; Stay</a></li>
           <li><a href="#faq">Q&amp;A</a></li>
         </ul>
-        <a href="https://withjoy.com/david-anna-sep5/rsvp" class="nav-rsvp--drawer" target="_blank" rel="noopener noreferrer">RSVP</a>
+        <a href="schedule.html" class="nav-rsvp--drawer">Day of Schedule</a>
       </div>
     </div>
     <button
@@ -1915,6 +2000,12 @@
       <div class="hero-heading">
         <h1 class="hero-title">ANNA &amp; DAVID</h1>
         <p class="hero-tagline">are <em>finally</em> getting married</p>
+        <a href="schedule.html" class="hero-cta">
+          Day of Schedule
+          <svg class="hero-cta-arrow" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M5 12h13M12.5 6l6 6-6 6" />
+          </svg>
+        </a>
       </div>
     </div>
   </section>
@@ -1954,7 +2045,6 @@
         ><em>Lincoln Estates</em></a> on
         <br /><em>Saturday September 5, 2026</em>
       </p>
-      <a href="https://withjoy.com/david-anna-sep5/rsvp" class="btn-outline-dark" target="_blank" rel="noopener noreferrer">RSVP</a>
     </div>
   </section>
 
@@ -2006,6 +2096,7 @@
         <p class="schedule-item-desc">Dinner, dancing, and toasts to the next chapter</p>
       </div>
     </div>
+    <a href="schedule.html" class="btn-outline-white" data-reveal>Day of Schedule</a>
   </section>
 
   <!-- OUR STORY -->
@@ -2165,7 +2256,7 @@
           <span class="countdown-label">MINUTES</span>
         </div>
       </div>
-      <a href="https://withjoy.com/david-anna-sep5/rsvp" class="btn-outline-white" target="_blank" rel="noopener noreferrer">RSVP</a>
+      <a href="schedule.html" class="btn-outline-white">Day of Schedule</a>
     </div>
     <img
       class="countdown-floral"
